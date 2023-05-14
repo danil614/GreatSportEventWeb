@@ -4,38 +4,86 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<div class="text-center" id="loading"><h1 class="display-6">Загрузка данных...</h1></div>
+
 <table id="locations_table" class="table table-striped">
     <thead>
-    <tr>
-        <th>Название</th>
-        <th>Город</th>
-        <th>Адрес</th>
-        <th>Тип</th>
-        <th>Вместимость</th>
-    </tr>
+        <tr>
+            <th data-sort="name">Название</th>
+            <th data-sort="city">Город</th>
+            <th data-sort="address">Адрес</th>
+            <th data-sort="type">Тип</th>
+            <th data-sort="capacity">Вместимость</th>
+        </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody></tbody>
 </table>
 
 <script>
+    let data = [];
+    const loadingDiv = document.querySelector('#loading');
+    const table = document.querySelector('#locations_table');
+    const tableBody = document.querySelector('#locations_table tbody');
+    const headers = document.querySelectorAll('#locations_table th[data-sort]');
+
     async function fetchData() {
+        loadingDiv.style.display = 'block';
+        table.style.display = 'none';
         const response = await fetch('/Locations/GetLocations');
-        return response.json();
+        data = await response.json();
+        loadingDiv.style.display = 'none';
+        table.style.display = '';
+        return data;
+    }
+
+    function renderTable(filteredData = data) {
+        tableBody.innerHTML = '';
+        for (const item of filteredData) {
+            const row = tableBody.insertRow();
+            row.insertCell().textContent = item.name;
+            row.insertCell().textContent = item.city.name;
+            row.insertCell().textContent = item.address;
+            row.insertCell().textContent = item.type.name;
+            row.insertCell().textContent = item.capacity;
+        }
+    }
+
+    function sortTable(column) {
+        const sortProperty = column.dataset.sort;
+        data.sort((a, b) => {
+            const aValue = a[sortProperty].toString().toLowerCase();
+            const bValue = b[sortProperty].toString().toLowerCase();
+            return aValue.localeCompare(bValue);
+        });
+        renderTable();
+    }
+
+    function addSortListeners() {
+        for (const header of headers) {
+            header.addEventListener('click', () => sortTable(header));
+        }
+    }
+
+    function searchTable(event) {
+        const searchText = event.target.value.toLowerCase();
+        const filteredData = data.filter(item => {
+            return Object.values(item).some(value =>
+                value.toString().toLowerCase().includes(searchText)
+            );
+        });
+        renderTable(filteredData);
     }
 
     async function loadTable() {
         try {
-            const data = await fetchData();
-            const tableBody = document.querySelector('#locations_table tbody');
-            for (let item of data) {
-                const row = tableBody.insertRow();
-                row.insertCell().textContent = item.name;
-                row.insertCell().textContent = item.city.name;
-                row.insertCell().textContent = item.address;
-                row.insertCell().textContent = item.type.name;
-                row.insertCell().textContent = item.capacity;
-            }
+            data = await fetchData();
+            renderTable();
+            addSortListeners();
+            const searchInput = document.createElement('input');
+            searchInput.addEventListener('input', searchTable);
+            const parentElement = document.querySelector('#locations_table').parentNode;
+            parentElement.insertBefore(searchInput, document.querySelector('#locations_table'));
+
         } catch (error) {
             console.error(error);
         }
