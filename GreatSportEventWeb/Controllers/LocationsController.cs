@@ -12,9 +12,14 @@ public class LocationsController : Controller
     {
         _context = context;
     }
-
+    
     public IActionResult Index()
     {
-        return View(_context.Locations.ToListAsync().Result);
+        return View();
+    }
+    
+    public ActionResult GetLocations()
+    {
+        return Json(_context.Locations.ToList());
     }
 }

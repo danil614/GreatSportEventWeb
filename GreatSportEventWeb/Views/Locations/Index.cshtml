@@ -1,12 +1,10 @@
-﻿@model System.Collections.Generic.List<GreatSportEventWeb.Models.Location>
-
-@{
+﻿@{
     ViewData["Title"] = "Места расположения";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<table class="table table-striped">
+<table id="locations_table" class="table table-striped">
     <thead>
     <tr>
         <th>Название</th>
@@ -17,15 +15,31 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Name</td>
-            <td>@item.City</td>
-            <td>@item.Address</td>
-            <td>@item.Type</td>
-            <td>@item.Capacity</td>
-        </tr>
-    }
     </tbody>
 </table>
+
+<script>
+    async function fetchData() {
+        const response = await fetch('/Locations/GetLocations');
+        return response.json();
+    }
+
+    async function loadTable() {
+        try {
+            const data = await fetchData();
+            const tableBody = document.querySelector('#locations_table tbody');
+            for (let item of data) {
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = item.name;
+                row.insertCell().textContent = item.city.name;
+                row.insertCell().textContent = item.address;
+                row.insertCell().textContent = item.type.name;
+                row.insertCell().textContent = item.capacity;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    loadTable();
+</script>
