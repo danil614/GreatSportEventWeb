@@ -15,18 +15,28 @@ public class Location
     [StringLength(maximumLength: 60)]
     public string Name { get; set; }
 
-    [Required]
+    /*[Required]
     [Column("city_id")]
-    public long CityId { get; set; }
+    public long CityId { get; set; }*/
+    
+    public long city_id { get; set; }
+    
+    [Required]
+    [ForeignKey("city_id")]
+    public City City { get; set; }
 
     [Required]
     [Column("address")]
     [StringLength(maximumLength: 60)]
     public string Address { get; set; }
 
-    [Required]
+    /*[Required]
     [Column("location_type_id")]
-    public int TypeId { get; set; }
+    public int TypeId { get; set; }*/
+    
+    [Required]
+    [ForeignKey("location_type_id")]
+    public Type Type { get; set; }
 
     [Required]
     [Column("capacity")]

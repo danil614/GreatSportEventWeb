@@ -1,18 +1,30 @@
-﻿@model TModel
+﻿@model System.Threading.Tasks.Task<System.Collections.Generic.List<GreatSportEventWeb.Models.Location>>
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Места расположения";
 }
 
-<!DOCTYPE html>
+<h1>@ViewData["Title"]</h1>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+<div class="table">
+    @foreach (var location in Model.Result)
+        {
+            <div class="item">
+                <span class="name">
+                    @location.Name
+                </span>
+                <span class="city">
+                    @location.City
+                </span>
+                <span class="address">
+                    @location.Address
+                </span>
+                <span class="type">
+                    @location.Type
+                </span>
+                <span class="capacity">
+                    @location.Capacity
+                </span>
+            </div>
+        }
 </div>
-</body>
-</html>

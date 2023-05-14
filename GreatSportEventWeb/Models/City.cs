@@ -14,4 +14,9 @@ public class City
     [Column("city_name")]
     [StringLength(maximumLength: 60)]
     public string Name { get; set; }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

@@ -6,14 +6,15 @@ namespace GreatSportEventWeb.Data;
 public class ApplicationContext : DbContext
 {
     public DbSet<Location> Locations { get; set; } = null!;
-    
-    public ApplicationContext()
+    public DbSet<City> Cities { get; set; } = null!;
+
+    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySQL(DatabaseConnection.GetConnectionString());
+        //optionsBuilder.UseMySQL(DatabaseConnection.GetConnectionString());
         optionsBuilder.LogTo(Console.WriteLine);
     }
 }

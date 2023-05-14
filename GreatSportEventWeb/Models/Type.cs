@@ -7,10 +7,15 @@ namespace GreatSportEventWeb.Models;
 public class Type
 {
     [Key, Column("type_id")]
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [Column("type_name")]
     [StringLength(maximumLength: 60)]
     public string Name { get; set; }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }
