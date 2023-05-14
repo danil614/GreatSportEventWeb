@@ -1,5 +1,4 @@
 ﻿using GreatSportEventWeb.Data;
-using GreatSportEventWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +15,6 @@ public class LocationsController : Controller
 
     public IActionResult Index()
     {
-        var locations = _context.Locations.ToListAsync();
-        return View(locations);
+        return View(_context.Locations.ToListAsync().Result);
     }
 }

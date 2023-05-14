@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 
 // Получаем строку подключения из файла конфигурации
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
- 
+
 // Добавляем контекст ApplicationContext в качестве сервиса в приложение
 builder.Services.AddDbContext<ApplicationContext>(options =>
 {
@@ -18,6 +18,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 var app = builder.Build();
 
 app.MapGet("/api/locations", async (ApplicationContext db) => await db.Locations.ToListAsync());
+app.MapGet("/api/cities", async (ApplicationContext db) => await db.Cities.ToListAsync());
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -35,7 +36,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
