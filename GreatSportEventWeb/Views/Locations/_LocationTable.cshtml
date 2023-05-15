@@ -1,0 +1,16 @@
+﻿@model System.Collections.Generic.List<GreatSportEventWeb.Models.Location>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Name</td>
+        <td>@item.City</td>
+        <td>@item.Address</td>
+        <td>@item.Type</td>
+        <td>@item.Capacity</td>
+        <td>
+            <button class="btn btn-primary" onclick="editLocation('@item.Id')">Изменить</button>
+            <button class="btn btn-danger" onclick="deleteLocation('@item.Id')">Удалить</button>
+        </td>
+    </tr>
+}

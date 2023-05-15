@@ -8,23 +8,101 @@
 
 <table id="locations_table" class="table table-striped">
     <thead>
-        <tr>
-            <th><a href="?sort=name">Название</a></th>
-            <th><a href="?sort=city">Город</a></th>
-            <th><a href="?sort=address">Адрес</a></th>
-            <th><a href="?sort=type">Тип</a></th>
-            <th><a href="?sort=capacity">Вместимость</a></th>
-        </tr>
+    <tr>
+        <th>
+            <a href="#" data-sort-by="name" data-sort-direction="desc">Название</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="city" data-sort-direction="desc">Город</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="address" data-sort-direction="desc">Адрес</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="type" data-sort-direction="desc">Тип</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="capacity" data-sort-direction="desc">Вместимость</a>
+        </th>
+        <th>Действия</th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.City</td>
-                <td>@item.Address</td>
-                <td>@item.Type</td>
-                <td>@item.Capacity</td>
-            </tr>
-        }
+    @await Html.PartialAsync("_LocationTable", Model)
     </tbody>
 </table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {          
+        // Назначаем обработчик события клика на заголовки столбцов
+        $("#locations_table th a").on("click", handleSortClick);
+    });
+        
+    // Функция для обновления данных таблицы через AJAX
+    function refreshTableData(sortBy, sortDirection) {
+        $.ajax({
+            url: "@Url.Action("GetSortedData", "Locations")",
+            type: "GET",
+            data: {
+                sortBy: sortBy,
+                sortDirection: sortDirection
+            },
+            success: function(data) {
+                $("#locations_table tbody").html(data);
+            },
+            error: function() {
+                alert("Произошла ошибка при обновлении данных.");
+            }
+        });
+    }
+
+    // Функция для обработки события клика на заголовке столбца
+    function handleSortClick(event) {
+        event.preventDefault();
+
+        var sortBy = $(this).data("sort-by");
+        var currentSortDirection = $(this).data("sort-direction");
+
+        // Меняем направление сортировки
+        var newSortDirection = currentSortDirection === "asc" ? "desc" : "asc";
+
+        // Обновляем данные таблицы через AJAX
+        refreshTableData(sortBy, newSortDirection);
+
+        // Обновляем значения атрибутов data-sort-direction
+        $(this).data("sort-direction", newSortDirection);
+    }
+    
+    // Функция для удаления записи по идентификатору
+    function deleteLocation(locationId) {
+        if (confirm("Вы уверены, что хотите удалить эту запись?")) {
+            $.ajax({
+                url: "@Url.Action("DeleteLocation", "Locations")",
+                type: "POST",
+                data: { id: locationId },
+                success: function() {
+                    // Получаем текущие значения сортировки
+                    var sortBy = $("#locations_table th a").data("sort-by");
+                    var sortDirection = $("#locations_table th a").data("sort-direction");
+    
+                    // Обновляем данные таблицы через AJAX с текущими значениями сортировки
+                    refreshTableData(sortBy, sortDirection);
+    
+                    alert("Запись успешно удалена.");
+                },
+                error: function() {
+                    alert("Произошла ошибка при удалении записи.");
+                }
+            });
+        }
+    }
+        
+    // Функция для изменения записи по идентификатору
+    function editLocation(locationId) {
+        // Здесь можно выполнить дополнительные действия для редактирования записи
+        // например, перенаправить пользователя на страницу редактирования
+        // или показать модальное окно с формой редактирования
+        alert("Вызвано редактирование записи.");
+    }
+</script>

@@ -14,20 +14,30 @@ public class LocationsController : Controller
         _context = context;
     }
 
-    public IActionResult Index(string sort)
+    public IActionResult Index()
+    {
+        return View(_context.Locations.ToList());
+    }
+    
+    public IActionResult GetSortedData(string sortBy, string sortDirection)
     {
         IQueryable<Location> locations = _context.Locations;
 
-        locations = sort switch
+        locations = sortBy switch
         {
-            "name" => locations.OrderBy(l => l.Name),
-            "city" => locations.OrderBy(l => l.City.Name),
-            "address" => locations.OrderBy(l => l.Address),
-            "type" => locations.OrderBy(l => l.Type.Name),
-            "capacity" => locations.OrderBy(l => l.Capacity),
+            "name" => sortDirection == "asc" ? locations.OrderBy(l => l.Name) : locations.OrderByDescending(l => l.Name),
+            "city" => sortDirection == "asc" ? locations.OrderBy(l => l.City.Name) : locations.OrderByDescending(l => l.City.Name),
+            "address" => sortDirection == "asc" ? locations.OrderBy(l => l.Address) : locations.OrderByDescending(l => l.Address),
+            "type" => sortDirection == "asc" ? locations.OrderBy(l => l.Type.Name) : locations.OrderByDescending(l => l.Type.Name),
+            "capacity" => sortDirection == "asc" ? locations.OrderBy(l => l.Capacity) : locations.OrderByDescending(l => l.Capacity),
             _ => locations
         };
 
-        return View(locations.ToList());
+        return PartialView("_LocationTable", locations.ToList());
+    }
+
+    public void DeleteLocation(int id)
+    {
+        Console.WriteLine($"Удаление записи с id: {id}");
     }
 }
