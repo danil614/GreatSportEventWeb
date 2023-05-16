@@ -34,11 +34,11 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {          
+    $(document).ready(function() {
         // Назначаем обработчик события клика на заголовки столбцов
         $("#locations_table th a").on("click", handleSortClick);
     });
-        
+
     // Функция для обновления данных таблицы через AJAX
     function refreshTableData(sortBy, sortDirection) {
         $.ajax({
@@ -60,9 +60,15 @@
     // Функция для обработки события клика на заголовке столбца
     function handleSortClick(event) {
         event.preventDefault();
+        
+        // Удаляем классы сортировки у всех столбцов
+        $("#locations_table th a").removeClass("active-sort");
 
         var sortBy = $(this).data("sort-by");
         var currentSortDirection = $(this).data("sort-direction");
+        
+        // Устанавливаем класс сортировки для текущего столбца
+        $(this).addClass("active-sort");
 
         // Меняем направление сортировки
         var newSortDirection = currentSortDirection === "asc" ? "desc" : "asc";
@@ -73,7 +79,7 @@
         // Обновляем значения атрибутов data-sort-direction
         $(this).data("sort-direction", newSortDirection);
     }
-    
+
     // Функция для удаления записи по идентификатору
     function deleteLocation(locationId) {
         if (confirm("Вы уверены, что хотите удалить эту запись?")) {
@@ -83,8 +89,9 @@
                 data: { id: locationId },
                 success: function() {
                     // Получаем текущие значения сортировки
-                    var sortBy = $("#locations_table th a").data("sort-by");
-                    var sortDirection = $("#locations_table th a").data("sort-direction");
+                    var currentSortColumn = $("#locations_table th a.active-sort");
+                    var sortBy = currentSortColumn.data("sort-by");
+                    var sortDirection = currentSortColumn.data("sort-direction");
     
                     // Обновляем данные таблицы через AJAX с текущими значениями сортировки
                     refreshTableData(sortBy, sortDirection);
@@ -97,7 +104,7 @@
             });
         }
     }
-        
+    
     // Функция для изменения записи по идентификатору
     function editLocation(locationId) {
         // Здесь можно выполнить дополнительные действия для редактирования записи
