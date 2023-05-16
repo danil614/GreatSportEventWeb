@@ -17,8 +17,8 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 var app = builder.Build();
 
-app.MapGet("/api/locations", async (ApplicationContext db) => await db.Locations.ToListAsync());
-app.MapGet("/api/cities", async (ApplicationContext db) => await db.Cities.ToListAsync());
+// app.MapGet("/api/locations", async (ApplicationContext db) => await db.Locations.ToListAsync());
+// app.MapGet("/api/cities", async (ApplicationContext db) => await db.Cities.ToListAsync());
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

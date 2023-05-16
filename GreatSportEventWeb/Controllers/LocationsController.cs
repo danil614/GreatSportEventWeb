@@ -34,9 +34,18 @@ public class LocationsController : Controller
 
         return PartialView("_LocationTable", locations.ToList());
     }
-
-    public void DeleteLocation(int id)
+    
+    public IActionResult DeleteLocation(int id)
     {
-        Console.WriteLine($"Удаление записи с id: {id}");
+        var location = _context.Locations.FirstOrDefault(l => l.Id == id);
+        if (location == null)
+        {
+            return NotFound(); // Если запись не найдена, возвращаем ошибку 404
+        }
+
+        _context.Locations.Remove(location);
+        var rowsAffected = _context.SaveChanges();
+
+        return rowsAffected > 0 ? Ok() : StatusCode(500);
     }
 }
