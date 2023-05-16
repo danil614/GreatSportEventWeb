@@ -9,8 +9,8 @@
         <td>@item.Type</td>
         <td>@item.Capacity</td>
         <td>
-            <button class="btn btn-primary" onclick="editLocation('@item.Id')">Изменить</button>
-            <button class="btn btn-danger" onclick="deleteLocation('@item.Id')">Удалить</button>
+            <button class="btn btn-secondary btn-sm" onclick="editLocation('@item.Id')" data-toggle="tooltip" data-placement="top" title="Редактировать"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteLocation('@item.Id')" data-toggle="tooltip" data-placement="top" title="Удалить"><i class="fas fa-trash-alt"></i></button>
         </td>
     </tr>
 }

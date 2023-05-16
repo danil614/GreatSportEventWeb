@@ -1,7 +1,6 @@
 ﻿using GreatSportEventWeb.Data;
 using GreatSportEventWeb.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace GreatSportEventWeb.Controllers;
 
