@@ -20,35 +20,40 @@ public class LocationsController : Controller
 
     public IActionResult Index()
     {
-        return View(GetCachedLocations());
+        return View(GetCachedData());
     }
     
-    public IActionResult GetSortedData(string sortBy, string sortDirection)
+    public IActionResult GetSortedData(string sortBy, string sortDirection, bool clearCache)
     {
-        var locations = GetCachedLocations();
-
-        locations = sortBy switch
+        if (clearCache)
         {
-            "name" => sortDirection == "asc" ? locations.OrderBy(l => l.Name) : locations.OrderByDescending(l => l.Name),
-            "city" => sortDirection == "asc" ? locations.OrderBy(l => l.City.Name) : locations.OrderByDescending(l => l.City.Name),
-            "address" => sortDirection == "asc" ? locations.OrderBy(l => l.Address) : locations.OrderByDescending(l => l.Address),
-            "type" => sortDirection == "asc" ? locations.OrderBy(l => l.Type.Name) : locations.OrderByDescending(l => l.Type.Name),
-            "capacity" => sortDirection == "asc" ? locations.OrderBy(l => l.Capacity) : locations.OrderByDescending(l => l.Capacity),
-            _ => locations
+            _cache.Remove(CacheKey);
+        }
+        
+        var data = GetCachedData();
+
+        data = sortBy switch
+        {
+            "name" => sortDirection == "asc" ? data.OrderBy(l => l.Name) : data.OrderByDescending(l => l.Name),
+            "city" => sortDirection == "asc" ? data.OrderBy(l => l.City.Name) : data.OrderByDescending(l => l.City.Name),
+            "address" => sortDirection == "asc" ? data.OrderBy(l => l.Address) : data.OrderByDescending(l => l.Address),
+            "type" => sortDirection == "asc" ? data.OrderBy(l => l.Type.Name) : data.OrderByDescending(l => l.Type.Name),
+            "capacity" => sortDirection == "asc" ? data.OrderBy(l => l.Capacity) : data.OrderByDescending(l => l.Capacity),
+            _ => data
         };
 
-        return PartialView("_LocationTable", locations);
+        return PartialView("_LocationTable", data);
     }
     
-    public IActionResult DeleteLocation(int id)
+    public IActionResult DeleteItem(int id)
     {
-        var location = _context.Locations.FirstOrDefault(l => l.Id == id);
-        if (location == null)
+        var item = _context.Locations.FirstOrDefault(l => l.Id == id);
+        if (item == null)
         {
             return NotFound(); // Если запись не найдена, возвращаем ошибку 404
         }
 
-        _context.Locations.Remove(location);
+        _context.Locations.Remove(item);
         var rowsAffected = _context.SaveChanges();
         
         // При удалении записи из базы данных, очищаем кэш
@@ -57,20 +62,20 @@ public class LocationsController : Controller
         return rowsAffected > 0 ? Ok() : StatusCode(500);
     }
     
-    private IQueryable<Location> GetCachedLocations()
+    private IQueryable<Location> GetCachedData()
     {
-        _cache.TryGetValue(CacheKey, out IQueryable<Location>? locations);
+        _cache.TryGetValue(CacheKey, out IQueryable<Location>? data);
         
-        if (locations == null)
+        if (data == null)
         {
-            locations = _context.Locations.ToList().AsQueryable();
+            data = _context.Locations.ToList().AsQueryable();
 
             var cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(10)); // Устанавливаем время жизни кэша
 
-            _cache.Set(CacheKey, locations, cacheEntryOptions);
+            _cache.Set(CacheKey, data, cacheEntryOptions);
         }
 
-        return locations;
+        return data;
     }
 }

@@ -6,7 +6,19 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<table id="locations_table" class="table table-striped">
+<div class="d-grid gap-2 d-md-block mt-4 mb-4">
+    <button class="btn btn-secondary" type="button" onclick="createItem()">
+        <i class="fas fa-plus"></i>  Создание
+    </button>
+    <button class="btn btn-secondary" type="button" onclick="exportToExcel()">
+        <i class="fas fa-file-excel"></i>  Экспорт
+    </button>
+    <button class="btn btn-secondary" type="button" onclick="refreshTableData(null, null, true)">
+        <i class="fas fa-sync"></i>  Обновить
+    </button>
+</div>
+
+<table id="data_table" class="table table-striped">
     <thead>
     <tr>
         <th>
@@ -38,20 +50,28 @@
 <script>
     $(document).ready(function() {
         // Назначаем обработчик события клика на заголовки столбцов
-        $("#locations_table th a").on("click", handleSortClick);
+        $("#data_table th a").on("click", handleSortClick);
     });
 
     // Функция для обновления данных таблицы через AJAX
-    function refreshTableData(sortBy, sortDirection) {
+    function refreshTableData(sortBy = null, sortDirection = null, clearCache = false) {
+        if (sortBy == null || sortDirection == null) {
+            // Получаем текущие значения сортировки
+            let currentSortColumn = $("#data_table th a.active-sort");
+            sortBy = currentSortColumn.data("sort-by");
+            sortDirection = currentSortColumn.data("sort-direction");
+        }
+        
         $.ajax({
             url: "@Url.Action("GetSortedData", "Locations")",
             type: "GET",
             data: {
                 sortBy: sortBy,
-                sortDirection: sortDirection
+                sortDirection: sortDirection,
+                clearCache: clearCache
             },
             success: function(data) {
-                $("#locations_table tbody").html(data);
+                $("#data_table tbody").html(data);
             },
             error: function() {
                 alert("Произошла ошибка при обновлении данных.");
@@ -64,16 +84,16 @@
         event.preventDefault();
         
         // Удаляем классы сортировки у всех столбцов
-        $("#locations_table th a").removeClass("active-sort");
+        $("#data_table th a").removeClass("active-sort");
 
-        var sortBy = $(this).data("sort-by");
-        var currentSortDirection = $(this).data("sort-direction");
+        let sortBy = $(this).data("sort-by");
+        let currentSortDirection = $(this).data("sort-direction");
         
         // Устанавливаем класс сортировки для текущего столбца
         $(this).addClass("active-sort");
 
         // Меняем направление сортировки
-        var newSortDirection = currentSortDirection === "asc" ? "desc" : "asc";
+        let newSortDirection = currentSortDirection === "asc" ? "desc" : "asc";
 
         // Обновляем данные таблицы через AJAX
         refreshTableData(sortBy, newSortDirection);
@@ -83,21 +103,14 @@
     }
 
     // Функция для удаления записи по идентификатору
-    function deleteLocation(locationId) {
+    function deleteItem(id) {
         if (confirm("Вы уверены, что хотите удалить эту запись?")) {
             $.ajax({
-                url: "@Url.Action("DeleteLocation", "Locations")",
+                url: "@Url.Action("DeleteItem", "Locations")",
                 type: "POST",
-                data: { id: locationId },
+                data: { id: id },
                 success: function() {
-                    // Получаем текущие значения сортировки
-                    var currentSortColumn = $("#locations_table th a.active-sort");
-                    var sortBy = currentSortColumn.data("sort-by");
-                    var sortDirection = currentSortColumn.data("sort-direction");
-    
-                    // Обновляем данные таблицы через AJAX с текущими значениями сортировки
-                    refreshTableData(sortBy, sortDirection);
-    
+                    refreshTableData();
                     alert("Запись успешно удалена.");
                 },
                 error: function() {
@@ -108,10 +121,20 @@
     }
     
     // Функция для изменения записи по идентификатору
-    function editLocation(locationId) {
+    function editItem(id) {
         // Здесь можно выполнить дополнительные действия для редактирования записи
         // например, перенаправить пользователя на страницу редактирования
         // или показать модальное окно с формой редактирования
         alert("Вызвано редактирование записи.");
+    }
+    
+    // Функция для создания новой записи
+    function createItem() {
+        alert("Вызвано создание записи.");
+    }
+    
+    // Функция для экспорта таблицы в Excel
+    function exportToExcel() {
+        alert("Вызван экспорт в Excel.");
     }
 </script>
