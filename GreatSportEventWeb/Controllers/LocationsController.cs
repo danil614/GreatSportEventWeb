@@ -1,26 +1,31 @@
 ﻿using GreatSportEventWeb.Data;
 using GreatSportEventWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace GreatSportEventWeb.Controllers;
 
 public class LocationsController : Controller
 {
+    private const string CacheKey = "Locations";
+    
     private readonly ApplicationContext _context;
+    private readonly IMemoryCache _cache;
 
-    public LocationsController(ApplicationContext context)
+    public LocationsController(ApplicationContext context, IMemoryCache cache)
     {
         _context = context;
+        _cache = cache;
     }
 
     public IActionResult Index()
     {
-        return View(_context.Locations.ToList());
+        return View(GetCachedLocations());
     }
     
     public IActionResult GetSortedData(string sortBy, string sortDirection)
     {
-        IQueryable<Location> locations = _context.Locations;
+        var locations = GetCachedLocations();
 
         locations = sortBy switch
         {
@@ -32,7 +37,7 @@ public class LocationsController : Controller
             _ => locations
         };
 
-        return PartialView("_LocationTable", locations.ToList());
+        return PartialView("_LocationTable", locations);
     }
     
     public IActionResult DeleteLocation(int id)
@@ -45,7 +50,27 @@ public class LocationsController : Controller
 
         _context.Locations.Remove(location);
         var rowsAffected = _context.SaveChanges();
+        
+        // При удалении записи из базы данных, очищаем кэш
+        _cache.Remove(CacheKey);
 
         return rowsAffected > 0 ? Ok() : StatusCode(500);
+    }
+    
+    private IQueryable<Location> GetCachedLocations()
+    {
+        _cache.TryGetValue(CacheKey, out IQueryable<Location>? locations);
+        
+        if (locations == null)
+        {
+            locations = _context.Locations.ToList().AsQueryable();
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(10)); // Устанавливаем время жизни кэша
+
+            _cache.Set(CacheKey, locations, cacheEntryOptions);
+        }
+
+        return locations;
     }
 }

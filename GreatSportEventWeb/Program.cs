@@ -15,6 +15,9 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
     if (connection != null) options.UseMySQL(connection);
 });
 
+// Добавляем кэширование
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 // app.MapGet("/api/locations", async (ApplicationContext db) => await db.Locations.ToListAsync());
