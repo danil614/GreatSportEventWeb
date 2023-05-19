@@ -11,10 +11,14 @@
 </div>
 
 <div class="modal-body">
-    <form method="post" asp-action="SaveItem" asp-controller="@modelName">
+    @using (Html.BeginForm("SaveItem", modelName, FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        @Html.Hidden("id", Model.Id)
+        
         <div class="mb-2">
             <label class="form-label" asp-for="Name"></label>
-            <input class="form-control" asp-for="Name" />
+            <input class="form-control" asp-for="Name"/>
             <span asp-validation-for="Name"></span>
         </div>
 
@@ -23,22 +27,26 @@
             <input class="form-control" asp-for="Address"/>
             <span asp-validation-for="Address"></span>
         </div>
-        
+
         <div class="mb-2">
             <label class="form-label" asp-for="Capacity"></label>
             <input class="form-control" asp-for="Capacity"/>
             <span asp-validation-for="Capacity"></span>
         </div>
-        
+
         <div class="mb-2">
             <label class="form-label" asp-for="Description"></label>
             <textarea class="form-control" rows="4" asp-for="Description"></textarea>
             <span asp-validation-for="Description"></span>
         </div>
-        
+
         <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Закрыть</button>
             <button class="btn btn-primary" type="submit">Сохранить</button>
         </div>
-    </form>
+    }
 </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

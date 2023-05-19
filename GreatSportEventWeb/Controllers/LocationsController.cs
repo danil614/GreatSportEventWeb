@@ -1,6 +1,7 @@
 ﻿using GreatSportEventWeb.Data;
 using GreatSportEventWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace GreatSportEventWeb.Controllers;
@@ -18,11 +19,13 @@ public class LocationsController : Controller
         _cache = cache;
     }
 
+    [HttpGet]
     public IActionResult Index()
     {
         return View(GetCachedData());
     }
     
+    [HttpGet]
     public IActionResult GetSortedData(string sortBy, string sortDirection, bool clearCache)
     {
         if (clearCache)
@@ -45,6 +48,7 @@ public class LocationsController : Controller
         return PartialView("_Table", data);
     }
     
+    [HttpPost]
     public IActionResult DeleteItem(int id)
     {
         var item = _context.Locations.FirstOrDefault(item => item.Id == id);
@@ -62,6 +66,7 @@ public class LocationsController : Controller
         return rowsAffected > 0 ? Ok() : StatusCode(500);
     }
 
+    [HttpGet]
     public IActionResult GetItem(int id)
     {
         var item = _context.Locations.FirstOrDefault(item => item.Id == id);
@@ -91,11 +96,16 @@ public class LocationsController : Controller
         return data;
     }
 
-    public void SaveItem(Location item)
+    [HttpPost]
+    public IActionResult SaveItem(Location item)
     {
         if (ModelState.IsValid)
         {
-            Console.WriteLine("Все поля правильно заполнены!");
+            return Redirect("Index");
+        }
+        else
+        {
+            return PartialView("Form", item);
         }
     }
 }
