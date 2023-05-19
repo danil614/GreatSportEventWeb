@@ -2,23 +2,24 @@
 
 @{
     ViewData["Title"] = "Места расположения";
+    const string modelName = "Locations";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="d-grid gap-2 d-md-block mt-4 mb-4">
-    <button class="btn btn-secondary" type="button" onclick="createItem()">
-        <i class="fas fa-plus"></i>  Создание
+<div class="btn-group mt-4 mb-3" role="group">
+    <button class="btn btn-outline-dark" type="button" onclick="createItem()">
+        <i class="fas fa-plus"></i> Создание
     </button>
-    <button class="btn btn-secondary" type="button" onclick="exportToExcel()">
-        <i class="fas fa-file-excel"></i>  Экспорт
+    <button class="btn btn-outline-dark" type="button" onclick="exportToExcel()">
+        <i class="fas fa-file-excel"></i> Экспорт
     </button>
-    <button class="btn btn-secondary" type="button" onclick="refreshTableData(null, null, true)">
-        <i class="fas fa-sync"></i>  Обновить
+    <button class="btn btn-outline-dark" type="button" onclick="refreshCache('@modelName')">
+        <i class="fas fa-sync"></i> Обновить
     </button>
 </div>
 
-<table id="data_table" class="table table-striped">
+<table id="dataTable" class="table table-striped table-hover">
     <thead>
     <tr>
         <th>
@@ -40,101 +41,16 @@
     </tr>
     </thead>
     <tbody>
-    @await Html.PartialAsync("_LocationTable", Model)
+    @await Html.PartialAsync("_Table", Model)
     </tbody>
 </table>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function() {
         // Назначаем обработчик события клика на заголовки столбцов
-        $("#data_table th a").on("click", handleSortClick);
-    });
-
-    // Функция для обновления данных таблицы через AJAX
-    function refreshTableData(sortBy = null, sortDirection = null, clearCache = false) {
-        if (sortBy == null || sortDirection == null) {
-            // Получаем текущие значения сортировки
-            let currentSortColumn = $("#data_table th a.active-sort");
-            sortBy = currentSortColumn.data("sort-by");
-            sortDirection = currentSortColumn.data("sort-direction");
-        }
-        
-        $.ajax({
-            url: "@Url.Action("GetSortedData", "Locations")",
-            type: "GET",
-            data: {
-                sortBy: sortBy,
-                sortDirection: sortDirection,
-                clearCache: clearCache
-            },
-            success: function(data) {
-                $("#data_table tbody").html(data);
-            },
-            error: function() {
-                alert("Произошла ошибка при обновлении данных.");
-            }
+        $("#dataTable th a").on("click", function(event) {
+            event.preventDefault();
+            handleSortClick('@modelName', $(this));
         });
-    }
-
-    // Функция для обработки события клика на заголовке столбца
-    function handleSortClick(event) {
-        event.preventDefault();
-        
-        // Удаляем классы сортировки у всех столбцов
-        $("#data_table th a").removeClass("active-sort");
-
-        let sortBy = $(this).data("sort-by");
-        let currentSortDirection = $(this).data("sort-direction");
-        
-        // Устанавливаем класс сортировки для текущего столбца
-        $(this).addClass("active-sort");
-
-        // Меняем направление сортировки
-        let newSortDirection = currentSortDirection === "asc" ? "desc" : "asc";
-
-        // Обновляем данные таблицы через AJAX
-        refreshTableData(sortBy, newSortDirection);
-
-        // Обновляем значения атрибутов data-sort-direction
-        $(this).data("sort-direction", newSortDirection);
-    }
-
-    // Функция для удаления записи по идентификатору
-    function deleteItem(id) {
-        if (confirm("Вы уверены, что хотите удалить эту запись?")) {
-            $.ajax({
-                url: "@Url.Action("DeleteItem", "Locations")",
-                type: "POST",
-                data: { id: id },
-                success: function() {
-                    refreshTableData();
-                    alert("Запись успешно удалена.");
-                },
-                error: function() {
-                    alert("Произошла ошибка при удалении записи.");
-                }
-            });
-        }
-    }
-    
-    // Функция для изменения записи по идентификатору
-    function editItem(id) {
-        // Здесь можно выполнить дополнительные действия для редактирования записи
-        // например, перенаправить пользователя на страницу редактирования
-        // или показать модальное окно с формой редактирования
-        alert("Вызвано редактирование записи.");
-    }
-    
-    // Функция для создания новой записи
-    function createItem() {
-        alert("Вызвано создание записи.");
-    }
-    
-    // Функция для экспорта таблицы в Excel
-    function exportToExcel() {
-        alert("Вызван экспорт в Excel.");
-    }
+    });
 </script>

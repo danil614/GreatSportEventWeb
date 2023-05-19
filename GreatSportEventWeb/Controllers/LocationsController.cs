@@ -42,12 +42,12 @@ public class LocationsController : Controller
             _ => data
         };
 
-        return PartialView("_LocationTable", data);
+        return PartialView("_Table", data);
     }
     
     public IActionResult DeleteItem(int id)
     {
-        var item = _context.Locations.FirstOrDefault(l => l.Id == id);
+        var item = _context.Locations.FirstOrDefault(item => item.Id == id);
         if (item == null)
         {
             return NotFound(); // Если запись не найдена, возвращаем ошибку 404
@@ -61,6 +61,17 @@ public class LocationsController : Controller
 
         return rowsAffected > 0 ? Ok() : StatusCode(500);
     }
+
+    public IActionResult GetItem(int id)
+    {
+        var item = _context.Locations.FirstOrDefault(item => item.Id == id);
+        if (item == null)
+        {
+            return NotFound(); // Если запись не найдена, возвращаем ошибку 404
+        }
+
+        return PartialView("Form", item);
+    }
     
     private IQueryable<Location> GetCachedData()
     {
@@ -68,6 +79,7 @@ public class LocationsController : Controller
         
         if (data == null)
         {
+            //data = new List<Location>().AsQueryable();
             data = _context.Locations.ToList().AsQueryable();
 
             var cacheEntryOptions = new MemoryCacheEntryOptions()
@@ -77,5 +89,15 @@ public class LocationsController : Controller
         }
 
         return data;
+    }
+
+    public IActionResult SaveItem(Location item)
+    {
+        if (ModelState.IsValid)
+        {
+            Console.WriteLine("Все поля правильно заполнены!");
+        }
+        
+        return Redirect("#");
     }
 }

@@ -8,9 +8,10 @@ public class Location
 {
     [Key] [Column("location_id")] public int Id { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Необходимо ввести название!")]
+    [Display(Name = "Название")]
     [Column("location_name")]
-    [StringLength(60)]
+    [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов!")]
     public string Name { get; set; }
 
     [Required] [Column("city_id")] public long CityId { get; set; }
@@ -19,6 +20,7 @@ public class Location
 
     [Required]
     [Column("address")]
+    [Display(Name = "Адрес")]
     [StringLength(60)]
     public string Address { get; set; }
 
@@ -28,8 +30,10 @@ public class Location
 
     public virtual Type Type { get; set; }
 
+    [Display(Name = "Вместимость")]
     [Required] [Column("capacity")] public int Capacity { get; set; }
 
+    [Display(Name = "Описание")]
     [Column("description")] public string? Description { get; set; }
 
 // [Column("picture")]
