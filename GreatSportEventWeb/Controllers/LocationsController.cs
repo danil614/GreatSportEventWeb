@@ -91,13 +91,11 @@ public class LocationsController : Controller
         return data;
     }
 
-    public IActionResult SaveItem(Location item)
+    public void SaveItem(Location item)
     {
         if (ModelState.IsValid)
         {
             Console.WriteLine("Все поля правильно заполнены!");
         }
-        
-        return Ok();
     }
 }
