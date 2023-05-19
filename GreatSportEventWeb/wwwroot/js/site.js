@@ -79,15 +79,16 @@ function editItem(modelName, id) {
 
 // Функция открытия модального окна.
 function openModal(url, id) {
-    let modal = $('#modalWindow');
+    // Получаем объект модального окна
+    let modal = new bootstrap.Modal(document.getElementById('modalWindow'));
     
     $.ajax({
         url: url,
         type: "GET",
         data: { id: id },
         success: function (response) {
-            modal.find('.modal-content').html(response);
-            modal.modal('show');
+            $('#modalWindow').find('.modal-content').html(response);
+            modal.show();
         },
         error: function(error) {
             console.log(error);

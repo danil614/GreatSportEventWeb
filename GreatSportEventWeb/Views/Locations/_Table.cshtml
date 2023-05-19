@@ -7,16 +7,20 @@
 @foreach (var item in Model)
 {
     <tr>
-        <td>@item.Name</td>
-        <td>@item.City</td>
-        <td>@item.Address</td>
-        <td>@item.Type</td>
-        <td>@item.Capacity</td>
-        <td>
-            <button class="btn btn-secondary btn-sm" onclick="editItem('@modelName', '@item.Id')" 
-                    data-toggle="tooltip" data-placement="top" title="Редактировать"><i class="fas fa-edit"></i></button>
-            <button class="btn btn-danger btn-sm" onclick="deleteItem('@modelName', '@item.Id')" 
-                    data-toggle="tooltip" data-placement="top" title="Удалить"><i class="fas fa-trash-alt"></i></button>
+        <td class="align-middle">@item.Name</td>
+        <td class="align-middle">@item.City</td>
+        <td class="align-middle">@item.Address</td>
+        <td class="align-middle">@item.Type</td>
+        <td class="align-middle">@item.Capacity</td>
+        <td class="align-middle">
+            <button class="btn btn-secondary btn-sm" onclick="editItem('@modelName', '@item.Id')"
+                    data-toggle="tooltip" data-placement="top" title="Редактировать">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="deleteItem('@modelName', '@item.Id')"
+                    data-toggle="tooltip" data-placement="top" title="Удалить">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
         </td>
     </tr>
 }
