@@ -98,6 +98,6 @@ public class LocationsController : Controller
             Console.WriteLine("Все поля правильно заполнены!");
         }
         
-        return Redirect("#");
+        return Ok();
     }
 }

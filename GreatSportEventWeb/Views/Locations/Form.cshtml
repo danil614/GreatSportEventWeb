@@ -13,25 +13,33 @@
 </div>
 
 <div class="modal-body">
-    <form method="post" asp-controller="@modelName" asp-action="SaveItem">
-        <label asp-for="Name"></label>
-        <input asp-for="Name"/>
-        <span asp-validation-for="Name"></span>
+    <form method="post" asp-controller="@modelName">
+        <div class="mb-3">
+            <label class="form-label" asp-for="Name"></label>
+            <input class="form-control" asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
 
-        <label asp-for="Address"></label>
-        <input asp-for="Address"/>
-        <span asp-validation-for="Address"></span>
-
-        <label asp-for="Capacity"></label>
-        <input asp-for="Capacity"/>
-        <span asp-validation-for="Capacity"></span>
-
-        <label asp-for="Description"></label>
-        <input asp-for="Description"/>
-        <span asp-validation-for="Description"></span>
+        <div class="mb-3">
+            <label class="form-label" asp-for="Address"></label>
+            <input class="form-control" asp-for="Address"/>
+            <span asp-validation-for="Address"></span>
+        </div>
         
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-        <input type="submit" value="Сохранить" class="btn btn-primary" />
+        <div class="mb-3">
+            <label class="form-label" asp-for="Capacity"></label>
+            <input class="form-control" asp-for="Capacity"/>
+            <span asp-validation-for="Capacity"></span>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label" asp-for="Description"></label>
+            <textarea class="form-control" rows="3" asp-for="Description"></textarea>
+            <span asp-validation-for="Description"></span>
+        </div>
+        
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Закрыть</button>
     </form>
 </div>
 
