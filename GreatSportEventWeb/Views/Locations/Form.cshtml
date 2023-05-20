@@ -21,11 +21,29 @@
             <input class="form-control" asp-for="Name"/>
             <span asp-validation-for="Name"></span>
         </div>
+        
+        <div class="mb-2">
+            <label class="form-label" asp-for="City"></label>
+            @Html.DropDownListFor(
+                item => item.CityId, 
+                new SelectList(ViewBag.Cities, "Id", ""),
+                new { @class="form-select" })
+            <span asp-validation-for="City"></span>
+        </div>
 
         <div class="mb-2">
             <label class="form-label" asp-for="Address"></label>
             <input class="form-control" asp-for="Address"/>
             <span asp-validation-for="Address"></span>
+        </div>
+        
+        <div class="mb-2">
+            <label class="form-label" asp-for="Type"></label>
+            @Html.DropDownListFor(
+                item => item.TypeId, 
+                new SelectList(ViewBag.Types, "Id", ""),
+                new { @class="form-select" })
+            <span asp-validation-for="Type"></span>
         </div>
 
         <div class="mb-2">

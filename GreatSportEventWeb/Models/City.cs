@@ -11,10 +11,10 @@ public class City
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public long Id { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Необходимо ввести название.")]
     [Column("city_name")]
-    [StringLength(60)]
-    public string Name { get; set; }
+    [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов.")]
+    public string Name { get; set; } = null!;
 
     //public virtual ICollection<Location> Locations { get; set; }
 

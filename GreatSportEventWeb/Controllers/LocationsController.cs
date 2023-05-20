@@ -1,15 +1,12 @@
 ﻿using GreatSportEventWeb.Data;
 using GreatSportEventWeb.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace GreatSportEventWeb.Controllers;
 
 public class LocationsController : Controller
 {
-    private const string CacheKey = "Locations";
-    
     private readonly ApplicationContext _context;
     private readonly IMemoryCache _cache;
 
@@ -22,7 +19,7 @@ public class LocationsController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return View(GetCachedData());
+        return View(DatabaseScripts<Location>.GetCachedData(_context, _cache, Location.TypeName));
     }
     
     [HttpGet]
@@ -30,10 +27,10 @@ public class LocationsController : Controller
     {
         if (clearCache)
         {
-            _cache.Remove(CacheKey);
+            _cache.Remove(Location.TypeName);
         }
-        
-        var data = GetCachedData();
+
+        var data = DatabaseScripts<Location>.GetCachedData(_context, _cache, Location.TypeName);
 
         data = sortBy switch
         {
@@ -61,7 +58,7 @@ public class LocationsController : Controller
         var rowsAffected = _context.SaveChanges();
         
         // При удалении записи из базы данных, очищаем кэш
-        _cache.Remove(CacheKey);
+        _cache.Remove(Location.TypeName);
 
         return rowsAffected > 0 ? Ok() : StatusCode(500);
     }
@@ -75,25 +72,10 @@ public class LocationsController : Controller
             return NotFound(); // Если запись не найдена, возвращаем ошибку 404
         }
 
+        ViewBag.Cities = _context.Cities; // -----------------------------
+        ViewBag.Types = _context.Types;
+
         return PartialView("Form", item);
-    }
-    
-    private IQueryable<Location> GetCachedData()
-    {
-        _cache.TryGetValue(CacheKey, out IQueryable<Location>? data);
-        
-        if (data == null)
-        {
-            //data = new List<Location>().AsQueryable();
-            data = _context.Locations.ToList().AsQueryable();
-
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(10)); // Устанавливаем время жизни кэша
-
-            _cache.Set(CacheKey, data, cacheEntryOptions);
-        }
-
-        return data;
     }
 
     [HttpPost]
