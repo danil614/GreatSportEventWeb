@@ -7,8 +7,6 @@ namespace GreatSportEventWeb.Models;
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public class Location : AsSerializable
 {
-    public const string TypeName = "Location";
-
     [Key] [Column("location_id")] public int Id { get; set; }
 
     [Required(ErrorMessage = "Необходимо ввести название.")]

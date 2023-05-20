@@ -2,6 +2,7 @@
 using GreatSportEventWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Type = GreatSportEventWeb.Models.Type;
 
 namespace GreatSportEventWeb.Controllers;
 
@@ -19,7 +20,7 @@ public class LocationsController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return View(DatabaseScripts<Location>.GetCachedData(_context, _cache, Location.TypeName));
+        return View(DatabaseScripts<Location>.GetCachedData(_context, _cache));
     }
     
     [HttpGet]
@@ -27,10 +28,10 @@ public class LocationsController : Controller
     {
         if (clearCache)
         {
-            _cache.Remove(Location.TypeName);
+            _cache.Remove(typeof(Location));
         }
 
-        var data = DatabaseScripts<Location>.GetCachedData(_context, _cache, Location.TypeName);
+        var data = DatabaseScripts<Location>.GetCachedData(_context, _cache);
 
         data = sortBy switch
         {
@@ -58,7 +59,7 @@ public class LocationsController : Controller
         var rowsAffected = _context.SaveChanges();
         
         // При удалении записи из базы данных, очищаем кэш
-        _cache.Remove(Location.TypeName);
+        _cache.Remove(typeof(Location));
 
         return rowsAffected > 0 ? Ok() : StatusCode(500);
     }
@@ -72,8 +73,8 @@ public class LocationsController : Controller
             return NotFound(); // Если запись не найдена, возвращаем ошибку 404
         }
 
-        ViewBag.Cities = _context.Cities; //DatabaseScripts<City>.GetCachedData(_context, _cache, City.TypeName);// -----------------------------
-        ViewBag.Types = _context.Types;
+        ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache);
+        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache);
 
         return PartialView("Form", item);
     }
@@ -87,7 +88,7 @@ public class LocationsController : Controller
             var rowsAffected = _context.SaveChanges();
         
             // При обновлении записи в базе данных, очищаем кэш
-            _cache.Remove(Location.TypeName);
+            _cache.Remove(typeof(Location));
 
             return rowsAffected > 0 ? Redirect("/Locations") : StatusCode(500);
         }

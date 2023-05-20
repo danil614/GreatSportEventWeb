@@ -4,9 +4,9 @@ namespace GreatSportEventWeb.Data;
 
 public static class DatabaseScripts<T> where T : class
 {
-    public static IQueryable<T> GetCachedData(ApplicationContext context, IMemoryCache cache, string cacheKey)
+    public static IQueryable<T> GetCachedData(ApplicationContext context, IMemoryCache cache)
     {
-        cache.TryGetValue(cacheKey, out IQueryable<T>? data);
+        cache.TryGetValue(typeof(T), out IQueryable<T>? data);
 
         if (data != null) return data;
         
@@ -15,7 +15,7 @@ public static class DatabaseScripts<T> where T : class
         var cacheEntryOptions = new MemoryCacheEntryOptions()
             .SetSlidingExpiration(TimeSpan.FromMinutes(10)); // Устанавливаем время жизни кэша
 
-        cache.Set(cacheKey, data, cacheEntryOptions);
+        cache.Set(typeof(T), data, cacheEntryOptions);
 
         return data;
     }
