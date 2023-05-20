@@ -38,7 +38,7 @@ public class Location
     public virtual Type Type { get; set; } = null!;
 
     [Display(Name = "Вместимость")]
-    [Range(1, int.MaxValue, ErrorMessage = "Значение вместимости должно быть больше 0.")]
+    [Range(1, int.MaxValue, ErrorMessage = "Значение вместимости должно быть больше 0 и меньше 2147483647.")]
     [Required(ErrorMessage = "Необходимо ввести вместимость.")]
     [Column("capacity")]
     public int Capacity { get; set; }

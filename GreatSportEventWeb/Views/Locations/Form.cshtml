@@ -16,51 +16,67 @@
         @Html.ValidationSummary(true)
         @Html.Hidden("id", Model.Id)
         
-        <div class="mb-2">
-            <label class="form-label" asp-for="Name"></label>
-            <input class="form-control" asp-for="Name"/>
-            <span asp-validation-for="Name"></span>
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-2" asp-for="Name"></label>
+            <div class="col-sm-10">
+                <input class="form-control" asp-for="Name"/>
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
         </div>
         
-        <div class="mb-2">
-            <label class="form-label" asp-for="City"></label>
-            @Html.DropDownListFor(
-                item => item.CityId, 
-                new SelectList(ViewBag.Cities, "Id", ""),
-                new { @class="form-select" })
-            <span asp-validation-for="City"></span>
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-2" asp-for="City"></label>
+            <div class="col-sm-10">
+                @Html.DropDownListFor(
+                    item => item.CityId, 
+                    new SelectList(ViewBag.Cities, "Id", ""),
+                    new { @class="form-select" })
+                <span class="text-danger" asp-validation-for="City"></span>
+            </div>
         </div>
 
-        <div class="mb-2">
-            <label class="form-label" asp-for="Address"></label>
-            <input class="form-control" asp-for="Address"/>
-            <span asp-validation-for="Address"></span>
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-2" asp-for="Address"></label>
+            <div class="col-sm-10">
+                <input class="form-control" asp-for="Address"/>
+                <span class="text-danger" asp-validation-for="Address"></span>
+            </div>
         </div>
         
-        <div class="mb-2">
-            <label class="form-label" asp-for="Type"></label>
-            @Html.DropDownListFor(
-                item => item.TypeId, 
-                new SelectList(ViewBag.Types, "Id", ""),
-                new { @class="form-select" })
-            <span asp-validation-for="Type"></span>
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-2" asp-for="Type"></label>
+            <div class="col-sm-10">
+                @Html.DropDownListFor(
+                    item => item.TypeId, 
+                    new SelectList(ViewBag.Types, "Id", ""),
+                    new { @class="form-select" })
+                <span class="text-danger" asp-validation-for="Type"></span>
+            </div>
         </div>
 
-        <div class="mb-2">
-            <label class="form-label" asp-for="Capacity"></label>
-            <input class="form-control" asp-for="Capacity"/>
-            <span asp-validation-for="Capacity"></span>
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-2" asp-for="Capacity"></label>
+            <div class="col-sm-10">
+                <input class="form-control" asp-for="Capacity"/>
+                <span class="text-danger" asp-validation-for="Capacity"></span>
+            </div>
         </div>
 
-        <div class="mb-2">
-            <label class="form-label" asp-for="Description"></label>
-            <textarea class="form-control" rows="4" asp-for="Description"></textarea>
-            <span asp-validation-for="Description"></span>
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-2" asp-for="Description"></label>
+            <div class="col-sm-10">
+                <textarea class="form-control" rows="8" asp-for="Description"></textarea>
+                <span class="text-danger" asp-validation-for="Description"></span>
+            </div>
         </div>
 
         <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Закрыть</button>
-            <button class="btn btn-primary" type="submit">Сохранить</button>
+            <div class="col-sm-2">
+                <button class="btn btn-secondary w-100" type="button" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn btn-primary w-100" type="submit">Сохранить</button>
+            </div>
         </div>
     }
 </div>
