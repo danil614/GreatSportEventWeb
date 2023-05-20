@@ -35,9 +35,9 @@ public class LocationsController : Controller
         data = sortBy switch
         {
             "name" => sortDirection == "asc" ? data.OrderBy(l => l.Name) : data.OrderByDescending(l => l.Name),
-            "city" => sortDirection == "asc" ? data.OrderBy(l => l.City.Name) : data.OrderByDescending(l => l.City.Name),
+            "city" => sortDirection == "asc" ? data.OrderBy(l => l.City!.Name) : data.OrderByDescending(l => l.City!.Name),
             "address" => sortDirection == "asc" ? data.OrderBy(l => l.Address) : data.OrderByDescending(l => l.Address),
-            "type" => sortDirection == "asc" ? data.OrderBy(l => l.Type.Name) : data.OrderByDescending(l => l.Type.Name),
+            "type" => sortDirection == "asc" ? data.OrderBy(l => l.Type!.Name) : data.OrderByDescending(l => l.Type!.Name),
             "capacity" => sortDirection == "asc" ? data.OrderBy(l => l.Capacity) : data.OrderByDescending(l => l.Capacity),
             _ => data
         };
@@ -72,7 +72,7 @@ public class LocationsController : Controller
             return NotFound(); // Если запись не найдена, возвращаем ошибку 404
         }
 
-        ViewBag.Cities = _context.Cities; // -----------------------------
+        ViewBag.Cities = _context.Cities; //DatabaseScripts<City>.GetCachedData(_context, _cache, City.TypeName);// -----------------------------
         ViewBag.Types = _context.Types;
 
         return PartialView("Form", item);
@@ -83,11 +83,24 @@ public class LocationsController : Controller
     {
         if (ModelState.IsValid)
         {
-            return Redirect("Index");
+            _context.Locations.Update(item);
+            var rowsAffected = _context.SaveChanges();
+        
+            // При обновлении записи в базе данных, очищаем кэш
+            _cache.Remove(Location.TypeName);
+
+            return rowsAffected > 0 ? Redirect("/Locations") : StatusCode(500);
         }
-        else
+
+        var errors = ModelState.Values.SelectMany(v => v.Errors);
+        var errorMessage = "";
+            
+        foreach (var error in errors)
         {
-            return PartialView("Form", item);
+            errorMessage += error.ErrorMessage + "\n";
         }
+        
+        Console.WriteLine(errorMessage);
+        return StatusCode(500);
     }
 }
