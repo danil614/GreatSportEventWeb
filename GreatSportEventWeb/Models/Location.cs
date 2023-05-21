@@ -20,6 +20,7 @@ public class Location : AsSerializable
     [Column("city_id")]
     public long CityId { get; set; }
     
+    [Display(Name = "Город")]
     public virtual City? City { get; set; }
 
     [Required(ErrorMessage = "Поле является обязательным.")]
@@ -33,6 +34,7 @@ public class Location : AsSerializable
     [Column("location_type_id")]
     public int TypeId { get; set; }
     
+    [Display(Name = "Тип")]
     public virtual Type? Type { get; set; }
 
     [Display(Name = "Вместимость")]

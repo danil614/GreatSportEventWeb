@@ -98,11 +98,6 @@ function openModal(url, id) {
 }
 
 // Функция для создания новой записи.
-function createItem() {
-    alert("Вызвано создание записи.");
-}
-
-// Функция для экспорта таблицы в Excel.
-function exportToExcel() {
-    alert("Вызван экспорт в Excel.");
+function createItem(modelName) {
+    openModal('/' + modelName + '/CreateItem', -1);
 }
