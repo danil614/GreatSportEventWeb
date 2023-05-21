@@ -74,7 +74,7 @@
             <div class="col-sm-2">
                 <button class="btn btn-secondary w-100" type="button" data-bs-dismiss="modal">Закрыть</button>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <button class="btn btn-primary w-100" type="submit">Сохранить</button>
             </div>
         </div>
@@ -84,3 +84,8 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.validator.messages.number = 'Введите правильное числовое значение.';
+    });
+</script>
