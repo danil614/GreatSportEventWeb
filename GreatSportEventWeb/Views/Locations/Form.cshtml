@@ -81,9 +81,8 @@
     }
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
 <script>
     $(document).ready(function () {
         $.validator.messages.number = 'Введите правильное числовое значение.';

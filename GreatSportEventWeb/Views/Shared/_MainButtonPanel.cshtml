@@ -1,0 +1,22 @@
+﻿@model string
+
+<div class="col-sm-8">
+    <div class="row mt-4 mb-3 g-sm-2">
+        <div class="col-sm-2">
+            <button class="btn btn-outline-dark w-100" type="button" onclick="createItem('@Model')">
+                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Создание
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-outline-dark w-100" type="button" 
+                    onclick="location.href='@Url.Action("ExportToExcel", Model)'">
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp; Экспорт
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-outline-dark w-100" type="button" onclick="refreshCache('@Model')">
+                <i class="fa fa-refresh" aria-hidden="true"></i>&nbsp; Обновить
+            </button>
+        </div>
+    </div>
+</div>
