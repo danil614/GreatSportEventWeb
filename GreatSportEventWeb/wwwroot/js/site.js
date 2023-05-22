@@ -101,3 +101,32 @@ function openModal(url, id) {
 function createItem(modelName) {
     openModal('/' + modelName + '/CreateItem', -1);
 }
+
+function filterTable() {
+    let searchText = $("#searchInput").val().trim().toLowerCase();
+    let rows = $("#dataTable tbody tr");
+
+    rows.each(function() {
+        let row = $(this);
+        let showRow = false;
+
+        row.find("td").each(function() {
+            let cellText = $(this).text().toLowerCase();
+            if (cellText.includes(searchText)) {
+                showRow = true;
+                return false; // Exit the inner loop if a match is found in any cell
+            }
+        });
+
+        if (showRow) {
+            row.show();
+        } else {
+            row.hide();
+        }
+    });
+}
+
+function clearInput() {
+    $("#searchInput").val("").focus();
+    filterTable();
+}
