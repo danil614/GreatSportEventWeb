@@ -13,4 +13,10 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Types\Form.cshtml" />
+      <AdditionalFiles Include="Views\Types\Index.cshtml" />
+      <AdditionalFiles Include="Views\Types\_Table.cshtml" />
+    </ItemGroup>
+
 </Project>

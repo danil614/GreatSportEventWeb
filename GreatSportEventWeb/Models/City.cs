@@ -11,13 +11,12 @@ public class City
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public long Id { get; set; }
 
-    [Required(ErrorMessage = "Необходимо ввести название.")]
+    [Required(ErrorMessage = "Поле является обязательным.")]
+    [Display(Name = "Название")]
     [Column("city_name")]
     [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов.")]
     public string Name { get; set; } = null!;
-
-    //public virtual ICollection<Location> Locations { get; set; }
-
+    
     public override string ToString()
     {
         return Name;

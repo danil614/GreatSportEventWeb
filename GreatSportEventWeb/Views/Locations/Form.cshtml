@@ -1,7 +1,7 @@
 ﻿@model Location
 
 @{
-    ViewData["Title"] = "Редактирование места расположения";
+    ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " места расположения";
     const string modelName = "Locations";
 }
 

@@ -76,6 +76,7 @@ public class LocationsController : Controller
 
         ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache);
         ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache);
+        ViewBag.Edit = true;
 
         return PartialView("Form", item);
     }
@@ -87,6 +88,7 @@ public class LocationsController : Controller
 
         ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache);
         ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache);
+        ViewBag.Edit = false;
 
         return PartialView("Form", item);
     }

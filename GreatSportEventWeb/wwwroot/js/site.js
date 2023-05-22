@@ -30,6 +30,8 @@ function refreshTableData(modelName, sortBy = null, sortDirection = null, clearC
             alert("Произошла ошибка при обновлении данных.");
         }
     });
+
+    $("#searchInput").val("");
 }
 
 // Функция для обработки события клика на заголовке столбца.
@@ -102,6 +104,7 @@ function createItem(modelName) {
     openModal('/' + modelName + '/CreateItem', -1);
 }
 
+// Функция для поиска в таблице
 function filterTable() {
     let searchText = $("#searchInput").val().trim().toLowerCase();
     let rows = $("#dataTable tbody tr");
@@ -126,7 +129,8 @@ function filterTable() {
     });
 }
 
-function clearInput() {
+// Функция для очистки поля поиска
+function clearInputFilter() {
     $("#searchInput").val("").focus();
     filterTable();
 }
