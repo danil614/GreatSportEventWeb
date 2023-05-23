@@ -131,6 +131,8 @@ public class LocationsController : Controller
     [HttpPost]
     public ActionResult CheckUnique([FromBody] Location item)
     {
+        // Здесь можно делать ModelState.IsValid
+        
         var isUnique = !_context.Locations.Any(source =>
             source.Name == item.Name &&
             source.CityId == item.CityId &&

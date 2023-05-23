@@ -89,15 +89,7 @@
         
         $('form').submit(function (event) {
             event.preventDefault();
-        
-            let fieldNames = [
-                'Name',
-                'CityId',
-                'Address',
-                'TypeId'
-            ];
-        
-            checkUnique(fieldNames, '@controllerName');
+            checkUnique('@controllerName');
         });
     });
 </script>

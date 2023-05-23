@@ -136,30 +136,32 @@ function clearInputFilter() {
 }
 
 // Функция для проверки данных на уникальность.
-function checkUnique(fieldNames, controllerName) {
-    let fieldData = {};
+function checkUnique(controllerName) {
+    let formData = {};
+    let fieldTags = ['input', 'textarea','select'];
     
-    for (let i = 0; i < fieldNames.length; i++) {
-        let fieldName = fieldNames[i];
-        fieldData[fieldName] = $('#' + fieldName).val();
-    }
+    fieldTags.forEach(function (tag) {
+        $('form ' + tag).each(function () {
+            let fieldName = $(this).attr('name');
+            formData[fieldName] = $(this).val();
+        });
+    });
     
-    console.log(fieldData);
+    // Этот лог удалить
+    console.log(formData);
 
     $.ajax({
         url: '/' + controllerName + '/CheckUnique',
         type: 'POST',
-        data: JSON.stringify(fieldData),
+        data: JSON.stringify(formData),
         contentType: 'application/json',
         success: function (result) {
             if (result.isUnique) {
                 $('form').unbind('submit').submit();
             } else {
-                for (let i = 0; i < fieldNames.length; i++) {
-                    let fieldName = fieldNames[i];
-                    $('#' + fieldName).addClass('input-validation-error');
-                }
+                $('form input').addClass('input-validation-error');
                 $('.text-danger').text('Запись не уникальна.');
+                // А здесь нужно отредачить сообщение
             }
         }
     });
