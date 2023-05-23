@@ -1,5 +1,6 @@
 ﻿using GreatSportEventWeb.Data;
 using GreatSportEventWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Type = GreatSportEventWeb.Models.Type;
@@ -18,6 +19,7 @@ public class LocationsController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "1")]
     public IActionResult Index()
     {
         return View(DatabaseScripts<Location>.GetCachedData(_context, _cache));
@@ -116,6 +118,7 @@ public class LocationsController : Controller
         return StatusCode(500);
     }
 
+    [HttpGet]
     public FileContentResult ExportToExcel()
     {
         var data = DatabaseScripts<Location>.GetCachedData(_context, _cache).ToList();

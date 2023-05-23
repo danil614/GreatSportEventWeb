@@ -1,5 +1,4 @@
 ﻿using GreatSportEventWeb.Data;
-using GreatSportEventWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Type = GreatSportEventWeb.Models.Type;
@@ -91,6 +90,7 @@ public class TypesController : Controller
         return StatusCode(500);
     }
 
+    [HttpGet]
     public FileContentResult ExportToExcel()
     {
         var data = DatabaseScripts<Type>.GetCachedData(_context, _cache).ToList();

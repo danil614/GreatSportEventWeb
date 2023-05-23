@@ -1,0 +1,50 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = "Вход в аккаунт";
+}
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-6">
+        <h1>@ViewData["Title"]</h1>
+
+        @if (ViewBag.ErrorText != null) {
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <div>
+                    @ViewBag.ErrorText
+                </div>
+            </div>
+        }
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            @Html.ValidationSummary(true)
+
+            <div class="mb-3 row">
+                <label class="col-form-label col-sm-2" asp-for="Login"></label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="Login"/>
+                    <span class="text-danger" asp-validation-for="Login"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-form-label col-sm-2" asp-for="Password"></label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="Password"/>
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <div class="col-sm-3">
+                    <button class="btn btn-primary w-100" type="submit">Войти</button>
+                </div>
+            </div>
+
+        }
+    </div>
+    <div class="col"></div>
+</div>

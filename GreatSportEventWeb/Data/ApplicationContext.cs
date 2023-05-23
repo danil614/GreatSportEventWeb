@@ -13,6 +13,7 @@ public class ApplicationContext : DbContext
     public DbSet<Location> Locations { get; set; } = null!;
     public DbSet<City> Cities { get; set; } = null!;
     public DbSet<Type> Types { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

@@ -19,4 +19,8 @@
       <AdditionalFiles Include="Views\Types\_Table.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Views\Users" />
+    </ItemGroup>
+
 </Project>
