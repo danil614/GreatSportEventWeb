@@ -1,10 +1,10 @@
 ﻿// Функция для обновления таблицы с очисткой кэша.
-function refreshCache(modelName) {
-    refreshTableData(modelName, null, null, true);
+function refreshCache(controllerName) {
+    refreshTableData(controllerName, null, null, true);
 }
 
 // Функция для обновления данных таблицы через AJAX.
-function refreshTableData(modelName, sortBy = null, sortDirection = null, clearCache = false) {
+function refreshTableData(controllerName, sortBy = null, sortDirection = null, clearCache = false) {
     if (sortBy == null || sortDirection == null) {
         // Получаем текущие значения сортировки
         let currentSortColumn = $("#dataTable th a.active-sort");
@@ -15,7 +15,7 @@ function refreshTableData(modelName, sortBy = null, sortDirection = null, clearC
     let table = $("#dataTable tbody");
 
     $.ajax({
-        url: '/' + modelName + '/GetSortedData',
+        url: '/' + controllerName + '/GetSortedData',
         type: "GET",
         data: {
             sortBy: sortBy,
@@ -35,7 +35,7 @@ function refreshTableData(modelName, sortBy = null, sortDirection = null, clearC
 }
 
 // Функция для обработки события клика на заголовке столбца.
-function handleSortClick(modelName, current) {
+function handleSortClick(controllerName, current) {
     // Удаляем классы сортировки у всех столбцов
     $("#dataTable th a").removeClass("active-sort");
 
@@ -49,21 +49,21 @@ function handleSortClick(modelName, current) {
     let newSortDirection = currentSortDirection === "asc" ? "desc" : "asc";
 
     // Обновляем данные таблицы через AJAX
-    refreshTableData(modelName, sortBy, newSortDirection);
+    refreshTableData(controllerName, sortBy, newSortDirection);
 
     // Обновляем значения атрибутов data-sort-direction
     current.data("sort-direction", newSortDirection);
 }
 
 // Функция для удаления записи по идентификатору.
-function deleteItem(modelName, id) {
+function deleteItem(controllerName, id) {
     if (confirm("Вы уверены, что хотите удалить эту запись?")) {
         $.ajax({
-            url: '/' + modelName + '/DeleteItem',
+            url: '/' + controllerName + '/DeleteItem',
             type: "POST",
             data: { id: id },
             success: function() {
-                refreshTableData(modelName);
+                refreshTableData(controllerName);
                 alert("Запись успешно удалена.");
             },
             error: function(error) {
@@ -75,8 +75,8 @@ function deleteItem(modelName, id) {
 }
 
 // Функция для изменения записи по идентификатору.
-function editItem(modelName, id) {
-    openModal('/' + modelName + '/GetItem', id);
+function editItem(controllerName, id) {
+    openModal('/' + controllerName + '/GetItem', id);
 }
 
 // Функция открытия модального окна.
@@ -100,8 +100,8 @@ function openModal(url, id) {
 }
 
 // Функция для создания новой записи.
-function createItem(modelName) {
-    openModal('/' + modelName + '/CreateItem', -1);
+function createItem(controllerName) {
+    openModal('/' + controllerName + '/CreateItem', -1);
 }
 
 // Функция для поиска в таблице
@@ -129,8 +129,38 @@ function filterTable() {
     });
 }
 
-// Функция для очистки поля поиска
+// Функция для очистки поля поиска.
 function clearInputFilter() {
     $("#searchInput").val("").focus();
     filterTable();
+}
+
+// Функция для проверки данных на уникальность.
+function checkUnique(fieldNames, controllerName) {
+    let fieldData = {};
+    
+    for (let i = 0; i < fieldNames.length; i++) {
+        let fieldName = fieldNames[i];
+        fieldData[fieldName] = $('#' + fieldName).val();
+    }
+    
+    console.log(fieldData);
+
+    $.ajax({
+        url: '/' + controllerName + '/CheckUnique',
+        type: 'POST',
+        data: JSON.stringify(fieldData),
+        contentType: 'application/json',
+        success: function (result) {
+            if (result.isUnique) {
+                $('form').unbind('submit').submit();
+            } else {
+                for (let i = 0; i < fieldNames.length; i++) {
+                    let fieldName = fieldNames[i];
+                    $('#' + fieldName).addClass('input-validation-error');
+                }
+                $('.text-danger').text('Запись не уникальна.');
+            }
+        }
+    });
 }

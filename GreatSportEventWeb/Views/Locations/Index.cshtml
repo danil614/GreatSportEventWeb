@@ -2,12 +2,12 @@
 
 @{
     ViewData["Title"] = "Места расположения";
-    const string modelName = "Locations";
+    const string controllerName = "Locations";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-@await Html.PartialAsync("_MainButtonPanel", modelName)
+@await Html.PartialAsync("_MainButtonPanel", controllerName)
 
 <table id="dataTable" class="table table-striped table-hover">
     <thead>
@@ -40,7 +40,7 @@
         // Назначаем обработчик события клика на заголовки столбцов
         $("#dataTable th a").on("click", function(event) {
             event.preventDefault();
-            handleSortClick('@modelName', $(this));
+            handleSortClick('@controllerName', $(this));
         });
     });
 </script>

@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " места расположения";
-    const string modelName = "Locations";
+    const string controllerName = "Locations";
 }
 
 <div class="modal-header">
@@ -11,7 +11,7 @@
 </div>
 
 <div class="modal-body">
-    @using (Html.BeginForm("SaveItem", modelName, FormMethod.Post))
+    @using (Html.BeginForm("SaveItem", controllerName, FormMethod.Post))
     {
         @Html.ValidationSummary(true)
         @Html.Hidden("Id", Model.Id)
@@ -86,5 +86,18 @@
 <script>
     $(document).ready(function () {
         $.validator.messages.number = 'Введите правильное числовое значение.';
+        
+        $('form').submit(function (event) {
+            event.preventDefault();
+        
+            let fieldNames = [
+                'Name',
+                'CityId',
+                'Address',
+                'TypeId'
+            ];
+        
+            checkUnique(fieldNames, '@controllerName');
+        });
     });
 </script>

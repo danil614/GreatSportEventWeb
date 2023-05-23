@@ -127,4 +127,16 @@ public class LocationsController : Controller
         var fileContent = ExcelExport.ExportExcel(data, columns, true);
         return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "Locations.xlsx");
     }
+    
+    [HttpPost]
+    public ActionResult CheckUnique([FromBody] Location item)
+    {
+        var isUnique = !_context.Locations.Any(source =>
+            source.Name == item.Name &&
+            source.CityId == item.CityId &&
+            source.Address == item.Address &&
+            source.TypeId == item.TypeId);
+
+        return Json(new { isUnique });
+    }
 }
