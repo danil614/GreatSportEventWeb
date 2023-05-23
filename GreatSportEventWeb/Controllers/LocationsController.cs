@@ -33,20 +33,20 @@ public class LocationsController : Controller
         data = sortBy switch
         {
             "name" => sortDirection == "asc" 
-                ? data.OrderBy(l => l.Name) 
-                : data.OrderByDescending(l => l.Name),
+                ? data.OrderBy(item => item.Name)
+                : data.OrderByDescending(item => item.Name),
             "city" => sortDirection == "asc"
-                ? data.OrderBy(l => l.City!.Name)
-                : data.OrderByDescending(l => l.City!.Name),
+                ? data.OrderBy(item => item.City!.Name)
+                : data.OrderByDescending(item => item.City!.Name),
             "address" => sortDirection == "asc" 
-                ? data.OrderBy(l => l.Address) 
-                : data.OrderByDescending(l => l.Address),
+                ? data.OrderBy(item => item.Address)
+                : data.OrderByDescending(item => item.Address),
             "type" => sortDirection == "asc"
-                ? data.OrderBy(l => l.Type!.Name)
-                : data.OrderByDescending(l => l.Type!.Name),
+                ? data.OrderBy(item => item.Type!.Name)
+                : data.OrderByDescending(item => item.Type!.Name),
             "capacity" => sortDirection == "asc"
-                ? data.OrderBy(l => l.Capacity)
-                : data.OrderByDescending(l => l.Capacity),
+                ? data.OrderBy(item => item.Capacity)
+                : data.OrderByDescending(item => item.Capacity),
             _ => data
         };
 
@@ -74,8 +74,8 @@ public class LocationsController : Controller
         var item = _context.Locations.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
 
-        ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache);
-        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache);
+        ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache).OrderBy(city => city.Name);
+        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name);
         ViewBag.Edit = true;
 
         return PartialView("Form", item);
@@ -86,8 +86,8 @@ public class LocationsController : Controller
     {
         var item = new Location();
 
-        ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache);
-        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache);
+        ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache).OrderBy(city => city.Name);
+        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name);
         ViewBag.Edit = false;
 
         return PartialView("Form", item);
