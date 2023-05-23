@@ -22,7 +22,8 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult AccessDenied()
     {
-        ViewBag.ErrorText = "Для доступа к странице войдите в систему!";
+        ViewBag.ErrorText = "У вас нет разрешения на доступ к этой странице. " +
+                            "Пожалуйста, войдите под другим пользователем, который имеет соответствующие права доступа.";
         return View("Login");
     }
 
@@ -37,14 +38,15 @@ public class AccountController : Controller
             
             if (item is null)
             {
-                ViewBag.ErrorText = "Пользователь с такими логином и паролем не найден!";
+                ViewBag.ErrorText = "Пользователь с указанным логином и паролем не найден!";
                 return View(user);
             }
             
             var claims = new List<Claim>
             {
-                new(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                new(ClaimsIdentity.DefaultRoleClaimType, user.AccessMode.ToString())
+                new(ClaimsIdentity.DefaultNameClaimType, item.Login),
+                new(ClaimsIdentity.DefaultRoleClaimType, item.AccessMode.ToString()),
+                new(ClaimTypes.GivenName, "")
             };
             
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme,
@@ -53,10 +55,17 @@ public class AccountController : Controller
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-            
+
             return RedirectToAction("Index", "Home");
         }
 
         return View(user);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Index", "Home");
     }
 }

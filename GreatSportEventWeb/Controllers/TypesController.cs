@@ -1,10 +1,12 @@
 ﻿using GreatSportEventWeb.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Type = GreatSportEventWeb.Models.Type;
 
 namespace GreatSportEventWeb.Controllers;
 
+[Authorize]
 public class TypesController : Controller
 {
     private readonly IMemoryCache _cache;
@@ -52,7 +54,7 @@ public class TypesController : Controller
         // При удалении записи из базы данных, очищаем кэш
         _cache.Remove(typeof(Type));
 
-        return rowsAffected > 0 ? Ok() : StatusCode(500);
+        return rowsAffected > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
     }
 
     [HttpGet]
@@ -84,10 +86,15 @@ public class TypesController : Controller
             // При обновлении записи в базе данных, очищаем кэш
             _cache.Remove(typeof(Type));
 
-            return rowsAffected > 0 ? Redirect("/Types") : StatusCode(500);
+            return rowsAffected > 0 ? Redirect("/Types") : StatusCode(StatusCodes.Status500InternalServerError);
         }
         
-        return StatusCode(500);
+        var errors = ModelState.Values.SelectMany(v => v.Errors);
+        var errorMessage = "";
+
+        foreach (var error in errors) errorMessage += error.ErrorMessage + "\n";
+        
+        return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
 
     [HttpGet]

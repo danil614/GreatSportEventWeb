@@ -7,6 +7,7 @@ using Type = GreatSportEventWeb.Models.Type;
 
 namespace GreatSportEventWeb.Controllers;
 
+[Authorize]
 public class LocationsController : Controller
 {
     private readonly IMemoryCache _cache;
@@ -19,7 +20,7 @@ public class LocationsController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "1")]
+    [Authorize(Roles = "Seller")]
     public IActionResult Index()
     {
         return View(DatabaseScripts<Location>.GetCachedData(_context, _cache));
@@ -56,6 +57,7 @@ public class LocationsController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public IActionResult DeleteItem(int id)
     {
         var item = _context.Locations.FirstOrDefault(item => item.Id == id);
@@ -67,7 +69,7 @@ public class LocationsController : Controller
         // При удалении записи из базы данных, очищаем кэш
         _cache.Remove(typeof(Location));
 
-        return rowsAffected > 0 ? Ok() : StatusCode(500);
+        return rowsAffected > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
     }
 
     [HttpGet]
@@ -106,16 +108,15 @@ public class LocationsController : Controller
             // При обновлении записи в базе данных, очищаем кэш
             _cache.Remove(typeof(Location));
 
-            return rowsAffected > 0 ? Redirect("/Locations") : StatusCode(500);
+            return rowsAffected > 0 ? Redirect("/Locations") : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         var errors = ModelState.Values.SelectMany(v => v.Errors);
         var errorMessage = "";
 
         foreach (var error in errors) errorMessage += error.ErrorMessage + "\n";
-
-        Console.WriteLine(errorMessage);
-        return StatusCode(500);
+        
+        return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
 
     [HttpGet]

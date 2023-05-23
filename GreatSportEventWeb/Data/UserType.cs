@@ -4,9 +4,6 @@ namespace GreatSportEventWeb.Data;
 
 public enum UserType
 {
-    [Display(Name = "Не определен")]
-    Null = 0,
-    
     [Display(Name = "Администратор")]
     Admin = 1,
     
