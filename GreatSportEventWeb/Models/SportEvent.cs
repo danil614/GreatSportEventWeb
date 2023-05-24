@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GreatSportEventWeb.Models;
 
 [Table("Sport_events")]
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public class SportEvent
 {
     [Key]
@@ -35,6 +36,7 @@ public class SportEvent
     [Display(Name = "Длительность")]
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("duration")]
+    [Range(typeof(TimeSpan), "00:00:00", "23:59:59", ErrorMessage = "Время должно быть больше 00:00:00 и меньше 23:59:59.")]
     public TimeSpan Duration { get; set; }
 
     [Display(Name = "Описание")]

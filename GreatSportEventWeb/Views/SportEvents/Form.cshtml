@@ -50,7 +50,7 @@
         <div class="mb-3 row">
             <label class="col-form-label col-sm-3" asp-for="Duration"></label>
             <div class="col-sm-9">
-                <input class="form-control" asp-for="Duration"/>
+                <input class="form-control" asp-for="Duration" type="time" step="1"/>
                 <span class="text-danger" asp-validation-for="Duration"></span>
             </div>
         </div>
