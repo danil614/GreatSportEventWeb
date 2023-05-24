@@ -11,6 +11,7 @@
 </div>
 
 <div class="modal-body">
+    <div id="formAlert" class="alert alert-danger" role="alert" style="display: none;">[TextContent]</div>
     @using (Html.BeginForm("SaveItem", controllerName, FormMethod.Post))
     {
         @Html.ValidationSummary(true)

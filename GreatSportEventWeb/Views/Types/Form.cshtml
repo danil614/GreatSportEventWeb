@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " типа";
-    const string modelName = "Types";
+    const string controllerName = "Types";
 }
 
 <div class="modal-header">
@@ -11,7 +11,8 @@
 </div>
 
 <div class="modal-body">
-    @using (Html.BeginForm("SaveItem", modelName, FormMethod.Post))
+    <div id="formAlert" class="alert alert-danger" role="alert" style="display: none;">[TextContent]</div>
+    @using (Html.BeginForm("SaveItem", controllerName, FormMethod.Post))
     {
         @Html.ValidationSummary(true)
         @Html.Hidden("Id", Model.Id)
@@ -37,3 +38,11 @@
 
 @await Html.PartialAsync("_ValidationScriptsPartial");
 
+<script>
+    $(document).ready(function () {
+        $('form').submit(function (event) {
+            event.preventDefault();
+            checkUnique('@controllerName');
+        });
+    });
+</script>

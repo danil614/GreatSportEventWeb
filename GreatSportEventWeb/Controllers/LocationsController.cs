@@ -20,7 +20,6 @@ public class LocationsController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "Seller")]
     public IActionResult Index()
     {
         return View(DatabaseScripts<Location>.GetCachedData(_context, _cache));
@@ -129,16 +128,17 @@ public class LocationsController : Controller
     }
     
     [HttpPost]
-    public ActionResult CheckUnique([FromBody] Location item)
+    public ActionResult CheckUnique([FromBody] Location? item)
     {
-        // Здесь можно делать ModelState.IsValid
+        if (item == null) return Json(new { isUnique = true, isValid = false });
         
         var isUnique = !_context.Locations.Any(source =>
+            source.Id != item.Id &&
             source.Name == item.Name &&
             source.CityId == item.CityId &&
             source.Address == item.Address &&
             source.TypeId == item.TypeId);
 
-        return Json(new { isUnique });
+        return Json(new { isUnique, isValid = ModelState.IsValid });
     }
 }

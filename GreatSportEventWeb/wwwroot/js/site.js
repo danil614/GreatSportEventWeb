@@ -137,8 +137,8 @@ function clearInputFilter() {
 
 // Функция для проверки данных на уникальность.
 function checkUnique(controllerName) {
+    let fieldTags = ['input', 'textarea', 'select'];
     let formData = {};
-    let fieldTags = ['input', 'textarea','select'];
     
     fieldTags.forEach(function (tag) {
         $('form ' + tag).each(function () {
@@ -147,8 +147,7 @@ function checkUnique(controllerName) {
         });
     });
     
-    // Этот лог удалить
-    console.log(formData);
+    let formAlert = $('#formAlert');
 
     $.ajax({
         url: '/' + controllerName + '/CheckUnique',
@@ -156,12 +155,15 @@ function checkUnique(controllerName) {
         data: JSON.stringify(formData),
         contentType: 'application/json',
         success: function (result) {
-            if (result.isUnique) {
+            if (result.isUnique && result.isValid) {
+                formAlert.hide();
                 $('form').unbind('submit').submit();
-            } else {
-                $('form input').addClass('input-validation-error');
-                $('.text-danger').text('Запись не уникальна.');
-                // А здесь нужно отредачить сообщение
+            } else if (!result.isValid) {
+                formAlert.text('Поля неправильно заполнены!');
+                formAlert.show();
+            } else if (!result.isUnique) {
+                formAlert.text('Запись с такими данными уже существует!');
+                formAlert.show();
             }
         }
     });

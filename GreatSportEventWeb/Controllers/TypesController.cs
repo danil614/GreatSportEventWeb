@@ -43,6 +43,7 @@ public class TypesController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public IActionResult DeleteItem(int id)
     {
         var item = _context.Types.FirstOrDefault(item => item.Id == id);
@@ -104,5 +105,17 @@ public class TypesController : Controller
         string[] columns = { "Name" };
         var fileContent = ExcelExport.ExportExcel(data, columns, true);
         return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "Types.xlsx");
+    }
+    
+    [HttpPost]
+    public ActionResult CheckUnique([FromBody] Type? item)
+    {
+        if (item == null) return Json(new { isUnique = true, isValid = false });
+        
+        var isUnique = !_context.Types.Any(source =>
+            source.Id != item.Id &&
+            source.Name == item.Name);
+
+        return Json(new { isUnique, isValid = ModelState.IsValid });
     }
 }
