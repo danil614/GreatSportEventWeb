@@ -108,7 +108,7 @@ public class TypesController : Controller
     }
     
     [HttpPost]
-    public ActionResult CheckUnique([FromBody] Type? item)
+    public IActionResult CheckUnique([FromBody] Type? item)
     {
         if (item == null) return Json(new { isUnique = true, isValid = false });
         

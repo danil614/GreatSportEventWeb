@@ -53,6 +53,6 @@ public class Location : AsSerializable
 
     public override string ToString()
     {
-        return $"{Name}, {Address}";
+        return $"{City?.Name}, {Name}";
     }
 }
