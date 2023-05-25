@@ -19,7 +19,7 @@ public class SportEvent
     [Display(Name = "Место проведения")]
     public virtual Location? Location { get; set; }
 
-    [Display(Name = "Тип")]
+    [Display(Name = "Тип мероприятия")]
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("type_id")]
     public int TypeId { get; set; }
@@ -27,7 +27,7 @@ public class SportEvent
     [Display(Name = "Тип мероприятия")]
     public virtual Type? Type { get; set; }
 
-    [Display(Name = "Начало")]
+    [Display(Name = "Начало мероприятия")]
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("sport_event_date_time")]
     [DataType(DataType.DateTime)]

@@ -16,6 +16,7 @@
     {
         @Html.ValidationSummary(true)
         @Html.Hidden("Id", Model.Id)
+        @Html.Hidden("Duration", Model.Duration) // Скрытое поле для хранения полного значения длительности
 
         <div class="mb-3 row">
             <label class="col-form-label col-sm-3" asp-for="TypeId"></label>
@@ -50,7 +51,7 @@
         <div class="mb-3 row">
             <label class="col-form-label col-sm-3" asp-for="Duration"></label>
             <div class="col-sm-9">
-                <input class="form-control" asp-for="Duration" type="time" step="1"/>
+                <input class="form-control" type="time" id="PartDuration" name="PartDuration"/>
                 <span class="text-danger" asp-validation-for="Duration"></span>
             </div>
         </div>
@@ -79,9 +80,15 @@
 <script>
     $(document).ready(function () {
         $.validator.messages.number = 'Введите правильное числовое значение.';
+        // Устанавливаем значение из скрытого поля
+        $('#PartDuration').val($('#Duration').val().substring(0, 5));
         
         $('form').submit(function (event) {
             event.preventDefault();
+
+            let timeValue = $('#PartDuration').val(); // Значение из поля ввода длительности
+            $('#Duration').val(timeValue + ":00"); // Установка значения в скрытое поле
+            
             checkUnique('@controllerName');
         });
     });

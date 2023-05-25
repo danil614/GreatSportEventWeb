@@ -29,12 +29,12 @@ public class Location : AsSerializable
     [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов.")]
     public string Address { get; set; } = null!;
     
-    [Display(Name = "Тип")]
+    [Display(Name = "Тип места")]
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("location_type_id")]
     public int TypeId { get; set; }
     
-    [Display(Name = "Тип")]
+    [Display(Name = "Тип места")]
     public virtual Type? Type { get; set; }
 
     [Display(Name = "Вместимость")]

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using GreatSportEventWeb.Data;
 
 namespace GreatSportEventWeb.Models;
 
@@ -13,6 +14,11 @@ public class Type
     [Column("type_name")]
     [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов.")]
     public string Name { get; set; } = null!;
+    
+    [Required(ErrorMessage = "Поле является обязательным.")]
+    [Display(Name = "Вид")]
+    [Column("type_type")]
+    public TypeType TypeType { get; set; }
 
     public override string ToString()
     {

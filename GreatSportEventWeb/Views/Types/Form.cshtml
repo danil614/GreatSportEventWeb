@@ -24,6 +24,17 @@
                 <span class="text-danger" asp-validation-for="Name"></span>
             </div>
         </div>
+        
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-2" asp-for="TypeType"></label>
+            <div class="col-sm-10">
+                @Html.DropDownListFor(
+                    item => item.TypeType,
+                    new SelectList(ViewBag.TypeList, "Id", "Name"),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="TypeType"></span>
+            </div>
+        </div>
 
         <div class="modal-footer">
             <div class="col-sm-2">

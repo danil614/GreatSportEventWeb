@@ -63,8 +63,10 @@ public class TypesController : Controller
     {
         var item = _context.Types.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
+        
         ViewBag.Edit = true;
-
+        ViewBag.TypeList = EnumHelper.GetEnumDropdownList<TypeType>();
+        
         return PartialView("Form", item);
     }
 
@@ -73,6 +75,8 @@ public class TypesController : Controller
     {
         var item = new Type();
         ViewBag.Edit = false;
+        ViewBag.TypeList = EnumHelper.GetEnumDropdownList<TypeType>();
+        
         return PartialView("Form", item);
     }
 
