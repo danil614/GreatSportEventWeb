@@ -81,17 +81,17 @@ public class CitiesController : Controller
     }
 
     [HttpPost]
-    public IActionResult SaveItem(City item, bool isNew)
+    public IActionResult SaveItem(City item, bool isEdit)
     {
         if (ModelState.IsValid)
         {
-            if (isNew)
+            if (isEdit)
             {
-                _context.Cities.Add(item);
+                _context.Cities.Update(item);
             }
             else
             {
-                _context.Cities.Update(item);
+                _context.Cities.Add(item);
             }
 
             var rowsAffected = _context.SaveChanges();

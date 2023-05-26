@@ -1,7 +1,8 @@
 ﻿@model GreatSportEventWeb.Models.City
 
 @{
-    ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " города";
+    bool isEdit = ViewBag.Edit;
+    ViewData["Title"] = (isEdit ? "Редактирование" : "Создание") + " города";
     const string controllerName = "Cities";
 }
 
@@ -15,6 +16,7 @@
     @using (Html.BeginForm("SaveItem", controllerName, FormMethod.Post))
     {
         @Html.ValidationSummary(true)
+        @Html.Hidden("isEdit", isEdit)
         
         <div class="mb-3 row">
             <label class="col-form-label col-sm-2" asp-for="Id"></label>
