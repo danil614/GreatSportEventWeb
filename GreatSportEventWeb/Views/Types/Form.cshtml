@@ -26,13 +26,13 @@
         </div>
         
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-2" asp-for="TypeType"></label>
+            <label class="col-form-label col-sm-2" asp-for="TypeTypeId"></label>
             <div class="col-sm-10">
                 @Html.DropDownListFor(
-                    item => item.TypeType,
+                    item => item.TypeTypeId,
                     new SelectList(ViewBag.TypeList, "Id", "Name"),
                     new { @class = "form-select" })
-                <span class="text-danger" asp-validation-for="TypeType"></span>
+                <span class="text-danger" asp-validation-for="TypeTypeId"></span>
             </div>
         </div>
 

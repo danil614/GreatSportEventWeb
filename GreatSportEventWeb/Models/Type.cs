@@ -18,7 +18,16 @@ public class Type
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Display(Name = "Вид")]
     [Column("type_type")]
-    public TypeType TypeType { get; set; }
+    public TypeType TypeType
+    {
+        get => (TypeType)TypeTypeId;
+        set => TypeTypeId = (int)value;
+    }
+    
+    [Required(ErrorMessage = "Поле является обязательным.")]
+    [Display(Name = "Вид")]
+    [NotMapped]
+    public int TypeTypeId { get; set; }
 
     public override string ToString()
     {
