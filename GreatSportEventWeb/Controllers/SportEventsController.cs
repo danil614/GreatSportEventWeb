@@ -75,7 +75,8 @@ public class SportEventsController : Controller
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
 
         ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache).OrderBy(location => location.ToString());
-        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name);
+        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name)
+            .Where(type => type.TypeType == TypeType.SportEvent);
         ViewBag.Edit = true;
 
         return PartialView("Form", item);
@@ -87,7 +88,8 @@ public class SportEventsController : Controller
         var item = new SportEvent();
 
         ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache).OrderBy(location => location.ToString());
-        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name);
+        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name)
+            .Where(type => type.TypeType == TypeType.SportEvent);
         ViewBag.Edit = false;
 
         return PartialView("Form", item);

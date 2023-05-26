@@ -21,18 +21,17 @@ public static class ExcelExport
             if (property != null)
             {
                 var displayName = GetDisplayName(property);
-                dataTable.Columns.Add(displayName,
-                    Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
+                dataTable.Columns.Add(displayName, typeof(string));
             }
         }
 
-        var values = new object?[columnsToTake.Length];
+        var values = new string?[columnsToTake.Length];
         foreach (var item in data)
         {
             for (var i = 0; i < columnsToTake.Length; i++)
             {
                 var property = properties.Find(columnsToTake[i], true);
-                values[i] = property?.GetValue(item);
+                values[i] = property?.GetValue(item)?.ToString();
             }
 
             dataTable.Rows.Add(values);

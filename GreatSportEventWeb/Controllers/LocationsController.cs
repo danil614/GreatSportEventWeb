@@ -78,7 +78,8 @@ public class LocationsController : Controller
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
 
         ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache).OrderBy(city => city.Name);
-        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name);
+        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name)
+            .Where(type => type.TypeType == TypeType.Location);
         ViewBag.Edit = true;
 
         return PartialView("Form", item);
@@ -90,7 +91,8 @@ public class LocationsController : Controller
         var item = new Location();
 
         ViewBag.Cities = DatabaseScripts<City>.GetCachedData(_context, _cache).OrderBy(city => city.Name);
-        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name);
+        ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name)
+            .Where(type => type.TypeType == TypeType.Location);
         ViewBag.Edit = false;
 
         return PartialView("Form", item);
