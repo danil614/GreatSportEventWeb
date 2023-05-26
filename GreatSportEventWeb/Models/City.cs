@@ -8,6 +8,9 @@ public class City
 {
     [Key]
     [Column("city_id")]
+    [Display(Name = "Код ОКТМО")]
+    [Range(1, long.MaxValue, ErrorMessage = "Число должно быть больше 0 и меньше 2147483647.")]
+    [RegularExpression("^[0-9]+$", ErrorMessage = "Число должно быть целым и положительным.")]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public long Id { get; set; }
 
