@@ -33,8 +33,8 @@ public class TypesController : Controller
 
         data = sortBy switch
         {
-            "name" => sortDirection == "asc" 
-                ? data.OrderBy(item => item.Name) 
+            "name" => sortDirection == "asc"
+                ? data.OrderBy(item => item.Name)
                 : data.OrderByDescending(item => item.Name),
             _ => data
         };
@@ -63,10 +63,10 @@ public class TypesController : Controller
     {
         var item = _context.Types.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
-        
+
         ViewBag.Edit = true;
         ViewBag.TypeList = EnumHelper.GetEnumDropdownList<TypeType>();
-        
+
         return PartialView("Form", item);
     }
 
@@ -76,7 +76,7 @@ public class TypesController : Controller
         var item = new Type();
         ViewBag.Edit = false;
         ViewBag.TypeList = EnumHelper.GetEnumDropdownList<TypeType>();
-        
+
         return PartialView("Form", item);
     }
 
@@ -93,12 +93,12 @@ public class TypesController : Controller
 
             return rowsAffected > 0 ? Redirect("/Types") : StatusCode(StatusCodes.Status500InternalServerError);
         }
-        
+
         var errors = ModelState.Values.SelectMany(v => v.Errors);
         var errorMessage = "";
 
         foreach (var error in errors) errorMessage += error.ErrorMessage + "\n";
-        
+
         return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
 
@@ -110,12 +110,12 @@ public class TypesController : Controller
         var fileContent = ExcelExport.ExportExcel(data, columns, true);
         return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "Types.xlsx");
     }
-    
+
     [HttpPost]
     public IActionResult CheckUnique([FromBody] Type? item)
     {
         if (item == null) return Json(new { isUnique = true, isValid = false });
-        
+
         var isUnique = !_context.Types.Any(source =>
             source.Id != item.Id &&
             source.Name == item.Name);

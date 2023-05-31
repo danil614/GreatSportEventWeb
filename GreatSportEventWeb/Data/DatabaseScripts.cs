@@ -9,7 +9,7 @@ public static class DatabaseScripts<T> where T : class
         cache.TryGetValue(typeof(T), out IQueryable<T>? data);
 
         if (data != null) return data;
-        
+
         data = context.Set<T>().ToList().AsQueryable();
 
         var cacheEntryOptions = new MemoryCacheEntryOptions()

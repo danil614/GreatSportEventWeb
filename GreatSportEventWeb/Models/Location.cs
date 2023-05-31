@@ -19,23 +19,21 @@ public class Location : AsSerializable
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("city_id")]
     public long CityId { get; set; }
-    
-    [Display(Name = "Город")]
-    public virtual City? City { get; set; }
+
+    [Display(Name = "Город")] public virtual City? City { get; set; }
 
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("address")]
     [Display(Name = "Адрес")]
     [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов.")]
     public string Address { get; set; } = null!;
-    
+
     [Display(Name = "Тип места")]
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("location_type_id")]
     public int TypeId { get; set; }
-    
-    [Display(Name = "Тип места")]
-    public virtual Type? Type { get; set; }
+
+    [Display(Name = "Тип места")] public virtual Type? Type { get; set; }
 
     [Display(Name = "Вместимость")]
     [Range(1, int.MaxValue, ErrorMessage = "Число должно быть больше 0 и меньше 2147483647.")]

@@ -14,7 +14,7 @@ public class Type
     [Column("type_name")]
     [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов.")]
     public string Name { get; set; } = null!;
-    
+
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Display(Name = "Вид")]
     [Column("type_type")]
@@ -23,7 +23,7 @@ public class Type
         get => (TypeType)TypeTypeId;
         set => TypeTypeId = (int)value;
     }
-    
+
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Display(Name = "Вид")]
     [NotMapped]

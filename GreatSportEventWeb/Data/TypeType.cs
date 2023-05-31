@@ -4,9 +4,7 @@ namespace GreatSportEventWeb.Data;
 
 public enum TypeType
 {
-    [Display(Name = "Тип места")]
-    Location = 1,
-    
-    [Display(Name = "Тип мероприятия")]
-    SportEvent = 2
+    [Display(Name = "Тип места")] Location = 1,
+
+    [Display(Name = "Тип мероприятия")] SportEvent = 2
 }

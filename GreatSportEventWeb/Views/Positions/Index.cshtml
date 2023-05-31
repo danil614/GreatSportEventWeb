@@ -1,8 +1,8 @@
-﻿@model IQueryable<City>
+﻿@model IQueryable<Position>
 
 @{
-    ViewData["Title"] = "Города";
-    const string controllerName = "Cities";
+    ViewData["Title"] = "Должности";
+    const string controllerName = "Positions";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -12,9 +12,6 @@
 <table id="dataTable" class="table table-striped table-hover">
     <thead>
     <tr>
-        <th>
-            <a href="#" data-sort-by="id" data-sort-direction="desc">Код ОКТМО</a>
-        </th>
         <th>
             <a href="#" data-sort-by="name" data-sort-direction="desc">Название</a>
         </th>

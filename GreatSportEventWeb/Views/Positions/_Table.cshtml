@@ -1,16 +1,13 @@
-﻿@model IQueryable<SportEvent>
+﻿@model IQueryable<Position>
 
 @{
-    const string controllerName = "SportEvents";
+    const string controllerName = "Positions";
 }
 
 @foreach (var item in Model)
 {
     <tr>
-        <td class="align-middle">@item.Type</td>
-        <td class="align-middle">@item.Location</td>
-        <td class="align-middle">@item.DateTime.ToString("dd.MM.yyyy HH:mm")</td>
-        <td class="align-middle">@item.Duration.ToString(@"hh\:mm")</td>
+        <td class="align-middle">@item.Name</td>
         <td class="align-middle">
             <button class="btn btn-secondary btn-sm" onclick="editItem('@controllerName', '@item.Id')"
                     data-toggle="tooltip" data-placement="top" title="Редактировать">

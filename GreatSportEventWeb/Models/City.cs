@@ -19,7 +19,7 @@ public class City
     [Column("city_name")]
     [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов.")]
     public string Name { get; set; } = null!;
-    
+
     public override string ToString()
     {
         return Name;

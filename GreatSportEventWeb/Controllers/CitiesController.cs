@@ -34,10 +34,10 @@ public class CitiesController : Controller
         data = sortBy switch
         {
             "id" => sortDirection == "asc"
-                ? data.OrderBy(item => item.Id) 
+                ? data.OrderBy(item => item.Id)
                 : data.OrderByDescending(item => item.Id),
             "name" => sortDirection == "asc"
-                ? data.OrderBy(item => item.Name) 
+                ? data.OrderBy(item => item.Name)
                 : data.OrderByDescending(item => item.Name),
             _ => data
         };
@@ -67,7 +67,7 @@ public class CitiesController : Controller
         var item = _context.Cities.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
         ViewBag.Edit = true;
-        
+
         return PartialView("Form", item);
     }
 
@@ -76,7 +76,7 @@ public class CitiesController : Controller
     {
         var item = new City();
         ViewBag.Edit = false;
-        
+
         return PartialView("Form", item);
     }
 
@@ -86,13 +86,9 @@ public class CitiesController : Controller
         if (ModelState.IsValid)
         {
             if (isEdit)
-            {
                 _context.Cities.Update(item);
-            }
             else
-            {
                 _context.Cities.Add(item);
-            }
 
             var rowsAffected = _context.SaveChanges();
 
@@ -101,12 +97,12 @@ public class CitiesController : Controller
 
             return rowsAffected > 0 ? Redirect("/Cities") : StatusCode(StatusCodes.Status500InternalServerError);
         }
-        
+
         var errors = ModelState.Values.SelectMany(v => v.Errors);
         var errorMessage = "";
 
         foreach (var error in errors) errorMessage += error.ErrorMessage + "\n";
-        
+
         return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
 
@@ -118,12 +114,12 @@ public class CitiesController : Controller
         var fileContent = ExcelExport.ExportExcel(data, columns, true);
         return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "Cities.xlsx");
     }
-    
+
     [HttpPost]
     public IActionResult CheckUnique([FromBody] City? item)
     {
         if (item == null) return Json(new { isUnique = true, isValid = false });
-        
+
         var isUnique = !_context.Cities.Any(source =>
             source.Id != item.Id &&
             source.Name == item.Name);

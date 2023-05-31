@@ -7,12 +7,12 @@ using Microsoft.Extensions.Caching.Memory;
 namespace GreatSportEventWeb.Controllers;
 
 [Authorize]
-public class TeamsController : Controller
+public class PositionsController : Controller
 {
     private readonly IMemoryCache _cache;
     private readonly ApplicationContext _context;
 
-    public TeamsController(ApplicationContext context, IMemoryCache cache)
+    public PositionsController(ApplicationContext context, IMemoryCache cache)
     {
         _context = context;
         _cache = cache;
@@ -21,30 +21,21 @@ public class TeamsController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return View(DatabaseScripts<Team>.GetCachedData(_context, _cache));
+        return View(DatabaseScripts<Position>.GetCachedData(_context, _cache));
     }
 
     [HttpGet]
     public IActionResult GetSortedData(string sortBy, string sortDirection, bool clearCache)
     {
-        if (clearCache) _cache.Remove(typeof(Team));
+        if (clearCache) _cache.Remove(typeof(Position));
 
-        var data = DatabaseScripts<Team>.GetCachedData(_context, _cache);
+        var data = DatabaseScripts<Position>.GetCachedData(_context, _cache);
 
         data = sortBy switch
         {
             "name" => sortDirection == "asc"
                 ? data.OrderBy(item => item.Name)
                 : data.OrderByDescending(item => item.Name),
-            "location" => sortDirection == "asc"
-                ? data.OrderBy(item => item.Location!.ToString())
-                : data.OrderByDescending(item => item.Location!.ToString()),
-            "come-from" => sortDirection == "asc"
-                ? data.OrderBy(item => item.ComeFrom)
-                : data.OrderByDescending(item => item.ComeFrom),
-            "rating" => sortDirection == "asc"
-                ? data.OrderBy(item => item.Rating)
-                : data.OrderByDescending(item => item.Rating),
             _ => data
         };
 
@@ -55,14 +46,14 @@ public class TeamsController : Controller
     [Authorize(Roles = "Admin")]
     public IActionResult DeleteItem(int id)
     {
-        var item = _context.Teams.FirstOrDefault(item => item.Id == id);
+        var item = _context.Positions.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
 
-        _context.Teams.Remove(item);
+        _context.Positions.Remove(item);
         var rowsAffected = _context.SaveChanges();
 
         // При удалении записи из базы данных, очищаем кэш
-        _cache.Remove(typeof(Team));
+        _cache.Remove(typeof(Position));
 
         return rowsAffected > 0 ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
     }
@@ -70,11 +61,9 @@ public class TeamsController : Controller
     [HttpGet]
     public IActionResult GetItem(int id)
     {
-        var item = _context.Teams.FirstOrDefault(item => item.Id == id);
+        var item = _context.Positions.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
 
-        ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache)
-            .OrderBy(location => location.ToString());
         ViewBag.Edit = true;
 
         return PartialView("Form", item);
@@ -83,27 +72,24 @@ public class TeamsController : Controller
     [HttpGet]
     public IActionResult CreateItem()
     {
-        var item = new Team();
-
-        ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache)
-            .OrderBy(location => location.ToString());
+        var item = new Position();
         ViewBag.Edit = false;
 
         return PartialView("Form", item);
     }
 
     [HttpPost]
-    public IActionResult SaveItem(Team item)
+    public IActionResult SaveItem(Position item)
     {
         if (ModelState.IsValid)
         {
-            _context.Teams.Update(item);
+            _context.Positions.Update(item);
             var rowsAffected = _context.SaveChanges();
 
             // При обновлении записи в базе данных, очищаем кэш
-            _cache.Remove(typeof(Team));
+            _cache.Remove(typeof(Position));
 
-            return rowsAffected > 0 ? Redirect("/Teams") : StatusCode(StatusCodes.Status500InternalServerError);
+            return rowsAffected > 0 ? Redirect("/Positions") : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         var errors = ModelState.Values.SelectMany(v => v.Errors);
@@ -117,22 +103,20 @@ public class TeamsController : Controller
     [HttpGet]
     public FileContentResult ExportToExcel()
     {
-        var data = DatabaseScripts<Team>.GetCachedData(_context, _cache).ToList();
-        string[] columns = { "Name", "Location", "ComeFrom", "Rating", "Description" };
+        var data = DatabaseScripts<Position>.GetCachedData(_context, _cache).ToList();
+        string[] columns = { "Name" };
         var fileContent = ExcelExport.ExportExcel(data, columns, true);
-        return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "Teams.xlsx");
+        return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "Positions.xlsx");
     }
 
     [HttpPost]
-    public IActionResult CheckUnique([FromBody] Team? item)
+    public IActionResult CheckUnique([FromBody] Position? item)
     {
         if (item == null) return Json(new { isUnique = true, isValid = false });
 
-        var isUnique = !_context.Teams.Any(source =>
+        var isUnique = !_context.Positions.Any(source =>
             source.Id != item.Id &&
-            source.Name == item.Name &&
-            source.LocationId == item.LocationId &&
-            source.ComeFrom == item.ComeFrom);
+            source.Name == item.Name);
 
         return Json(new { isUnique, isValid = ModelState.IsValid });
     }

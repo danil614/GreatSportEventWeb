@@ -34,13 +34,13 @@ public class SportEventsController : Controller
 
         data = sortBy switch
         {
-            "type" => sortDirection == "asc" 
+            "type" => sortDirection == "asc"
                 ? data.OrderBy(item => item.Type!.ToString())
                 : data.OrderByDescending(item => item.Type!.ToString()),
             "location" => sortDirection == "asc"
                 ? data.OrderBy(item => item.Location!.ToString())
                 : data.OrderByDescending(item => item.Location!.ToString()),
-            "datetime" => sortDirection == "asc" 
+            "datetime" => sortDirection == "asc"
                 ? data.OrderBy(item => item.DateTime)
                 : data.OrderByDescending(item => item.DateTime),
             "duration" => sortDirection == "asc"
@@ -74,7 +74,8 @@ public class SportEventsController : Controller
         var item = _context.SportEvents.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
 
-        ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache).OrderBy(location => location.ToString());
+        ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache)
+            .OrderBy(location => location.ToString());
         ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name)
             .Where(type => type.TypeType == TypeType.SportEvent);
         ViewBag.Edit = true;
@@ -87,7 +88,8 @@ public class SportEventsController : Controller
     {
         var item = new SportEvent();
 
-        ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache).OrderBy(location => location.ToString());
+        ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache)
+            .OrderBy(location => location.ToString());
         ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name)
             .Where(type => type.TypeType == TypeType.SportEvent);
         ViewBag.Edit = false;
@@ -113,7 +115,7 @@ public class SportEventsController : Controller
         var errorMessage = "";
 
         foreach (var error in errors) errorMessage += error.ErrorMessage + "\n";
-        
+
         return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
 
@@ -125,12 +127,12 @@ public class SportEventsController : Controller
         var fileContent = ExcelExport.ExportExcel(data, columns, true);
         return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "SportEvents.xlsx");
     }
-    
+
     [HttpPost]
     public IActionResult CheckUnique([FromBody] SportEvent? item)
     {
         if (item == null) return Json(new { isUnique = true, isValid = false });
-        
+
         var isUnique = !_context.SportEvents.Any(source =>
             source.Id != item.Id &&
             source.TypeId == item.TypeId &&

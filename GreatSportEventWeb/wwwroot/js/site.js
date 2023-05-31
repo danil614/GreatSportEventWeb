@@ -11,7 +11,7 @@ function refreshTableData(controllerName, sortBy = null, sortDirection = null, c
         sortBy = currentSortColumn.data("sort-by");
         sortDirection = currentSortColumn.data("sort-direction");
     }
-    
+
     let table = $("#dataTable tbody");
 
     $.ajax({
@@ -22,10 +22,10 @@ function refreshTableData(controllerName, sortBy = null, sortDirection = null, c
             sortDirection: sortDirection,
             clearCache: clearCache
         },
-        success: function(data) {
+        success: function (data) {
             table.html(data);
         },
-        error: function(error) {
+        error: function (error) {
             console.log(error);
             alert("Произошла ошибка при обновлении данных.");
         }
@@ -61,12 +61,12 @@ function deleteItem(controllerName, id) {
         $.ajax({
             url: '/' + controllerName + '/DeleteItem',
             type: "POST",
-            data: { id: id },
-            success: function() {
+            data: {id: id},
+            success: function () {
                 refreshTableData(controllerName);
                 alert("Запись успешно удалена.");
             },
-            error: function(error) {
+            error: function (error) {
                 console.log(error);
                 alert("Произошла ошибка при удалении записи.");
             }
@@ -83,16 +83,16 @@ function editItem(controllerName, id) {
 function openModal(url, id) {
     // Получаем объект модального окна
     let modal = new bootstrap.Modal(document.getElementById('modalWindow'));
-    
+
     $.ajax({
         url: url,
         type: "GET",
-        data: { id: id },
+        data: {id: id},
         success: function (response) {
             $('#modalWindow').find('.modal-content').html(response);
             modal.show();
         },
-        error: function(error) {
+        error: function (error) {
             console.log(error);
             alert("Произошла ошибка при загрузке данных.");
         }
@@ -109,11 +109,11 @@ function filterTable() {
     let searchText = $("#searchInput").val().trim().toLowerCase();
     let rows = $("#dataTable tbody tr");
 
-    rows.each(function() {
+    rows.each(function () {
         let row = $(this);
         let showRow = false;
 
-        row.find("td").each(function() {
+        row.find("td").each(function () {
             let cellText = $(this).text().toLowerCase();
             if (cellText.includes(searchText)) {
                 showRow = true;
@@ -139,14 +139,14 @@ function clearInputFilter() {
 function checkUnique(controllerName) {
     let fieldTags = ['input', 'textarea', 'select'];
     let formData = {};
-    
+
     fieldTags.forEach(function (tag) {
         $('form ' + tag).each(function () {
             let fieldName = $(this).attr('name');
             formData[fieldName] = $(this).val();
         });
     });
-    
+
     let formAlert = $('#formAlert');
 
     $.ajax({

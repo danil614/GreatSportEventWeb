@@ -6,17 +6,14 @@ namespace GreatSportEventWeb.Models;
 [Table("Teams")]
 public class Team
 {
-    [Key]
-    [Column("team_id")]
-    public int Id { get; set; }
+    [Key] [Column("team_id")] public int Id { get; set; }
 
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Display(Name = "Место проживания")]
     [Column("location_id")]
     public int LocationId { get; set; }
-    
-    [Display(Name = "Место проживания")]
-    public virtual Location? Location { get; set; }
+
+    [Display(Name = "Место проживания")] public virtual Location? Location { get; set; }
 
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Display(Name = "Название команды")]

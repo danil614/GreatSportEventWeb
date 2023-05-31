@@ -15,9 +15,12 @@ public class AccountController : Controller
     {
         _context = context;
     }
-    
+
     [HttpGet]
-    public IActionResult Login() => View();
+    public IActionResult Login()
+    {
+        return View();
+    }
 
     [HttpGet]
     public IActionResult AccessDenied()
@@ -35,23 +38,23 @@ public class AccountController : Controller
             var item = _context.Users.FirstOrDefault(
                 item => item.Login == user.Login &&
                         item.Password == HashPassword.GetHash(user.Password));
-            
+
             if (item is null)
             {
                 ViewBag.ErrorText = "Пользователь с указанным логином и паролем не найден!";
                 return View(user);
             }
-            
+
             var claims = new List<Claim>
             {
                 new(ClaimsIdentity.DefaultNameClaimType, item.Login),
                 new(ClaimsIdentity.DefaultRoleClaimType, item.AccessMode.ToString()),
                 new(ClaimTypes.GivenName, "")
             };
-            
+
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme,
                 ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            
+
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
@@ -61,7 +64,7 @@ public class AccountController : Controller
 
         return View(user);
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> Logout()
     {

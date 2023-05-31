@@ -14,16 +14,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Teams\Form.cshtml" />
-      <AdditionalFiles Include="Views\Teams\Index.cshtml" />
-      <AdditionalFiles Include="Views\Teams\_Table.cshtml" />
-      <AdditionalFiles Include="Views\Types\Form.cshtml" />
-      <AdditionalFiles Include="Views\Types\Index.cshtml" />
-      <AdditionalFiles Include="Views\Types\_Table.cshtml" />
+        <AdditionalFiles Include="Views\Positions\Form.cshtml" />
+        <AdditionalFiles Include="Views\Positions\Index.cshtml" />
+        <AdditionalFiles Include="Views\Positions\_Table.cshtml" />
+        <AdditionalFiles Include="Views\Teams\Form.cshtml" />
+        <AdditionalFiles Include="Views\Teams\Index.cshtml" />
+        <AdditionalFiles Include="Views\Teams\_Table.cshtml" />
+        <AdditionalFiles Include="Views\Types\Form.cshtml" />
+        <AdditionalFiles Include="Views\Types\Index.cshtml" />
+        <AdditionalFiles Include="Views\Types\_Table.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Views\Users" />
+        <Folder Include="Views\Users" />
     </ItemGroup>
 
 </Project>

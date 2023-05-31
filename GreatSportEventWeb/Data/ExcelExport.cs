@@ -78,12 +78,12 @@ public static class ExcelExport
 
             columnIndex++;
         }
-        
+
         // format header - bold
-        using (var excelRange = workSheet.Cells[1, 1, 1, dataTable.Columns.Count]) 
+        using (var excelRange = workSheet.Cells[1, 1, 1, dataTable.Columns.Count])
         {
             excelRange.Style.Font.Bold = true;
-        } 
+        }
 
         return package.GetAsByteArray();
     }

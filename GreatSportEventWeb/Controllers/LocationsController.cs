@@ -34,13 +34,13 @@ public class LocationsController : Controller
 
         data = sortBy switch
         {
-            "name" => sortDirection == "asc" 
+            "name" => sortDirection == "asc"
                 ? data.OrderBy(item => item.Name)
                 : data.OrderByDescending(item => item.Name),
             "city" => sortDirection == "asc"
                 ? data.OrderBy(item => item.City!.Name)
                 : data.OrderByDescending(item => item.City!.Name),
-            "address" => sortDirection == "asc" 
+            "address" => sortDirection == "asc"
                 ? data.OrderBy(item => item.Address)
                 : data.OrderByDescending(item => item.Address),
             "type" => sortDirection == "asc"
@@ -116,7 +116,7 @@ public class LocationsController : Controller
         var errorMessage = "";
 
         foreach (var error in errors) errorMessage += error.ErrorMessage + "\n";
-        
+
         return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
 
@@ -128,12 +128,12 @@ public class LocationsController : Controller
         var fileContent = ExcelExport.ExportExcel(data, columns, true);
         return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "Locations.xlsx");
     }
-    
+
     [HttpPost]
     public IActionResult CheckUnique([FromBody] Location? item)
     {
         if (item == null) return Json(new { isUnique = true, isValid = false });
-        
+
         var isUnique = !_context.Locations.Any(source =>
             source.Id != item.Id &&
             source.Name == item.Name &&

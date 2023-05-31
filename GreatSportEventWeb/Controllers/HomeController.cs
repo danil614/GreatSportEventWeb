@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using GreatSportEventWeb.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GreatSportEventWeb.Controllers;
@@ -13,7 +12,7 @@ public class HomeController : Controller
     {
         _logger = logger;
     }
-    
+
     public IActionResult Index()
     {
         return View();
