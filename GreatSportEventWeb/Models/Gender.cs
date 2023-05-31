@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GreatSportEventWeb.Models;
 
-[Table("Positions")]
-public class Position
+[Table("Gender")]
+public class Gender
 {
-    [Key] [Column("position_id")] public int Id { get; set; }
+    [Key] [Column("gender_id")] public int Id { get; set; }
 
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Display(Name = "Название")]
-    [Column("position_name")]
-    [StringLength(60, ErrorMessage = "Текст должен быть меньше 60 символов.")]
+    [Column("gender_name")]
+    [StringLength(20, ErrorMessage = "Текст должен быть меньше 20 символов.")]
     public string Name { get; set; } = null!;
     
     public override string ToString()

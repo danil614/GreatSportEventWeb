@@ -1,0 +1,52 @@
+﻿@model IQueryable<Athlete>
+
+@{
+    ViewData["Title"] = "Спортсмены";
+    const string controllerName = "Athletes";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@await Html.PartialAsync("_MainButtonPanel", controllerName)
+
+<table id="dataTable" class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>
+            <a href="#" data-sort-by="full-name" data-sort-direction="desc">ФИО</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="gender" data-sort-direction="desc">Пол</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="phone-number" data-sort-direction="desc">Номер телефона</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="position" data-sort-direction="desc">Должность</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="team" data-sort-direction="desc">Команда</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="birth-date" data-sort-direction="desc">Дата рождения</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="rating" data-sort-direction="desc">Рейтинг</a>
+        </th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    @await Html.PartialAsync("_Table", Model)
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        // Назначаем обработчик события клика на заголовки столбцов
+        $("#dataTable th a").on("click", function(event) {
+            event.preventDefault();
+            handleSortClick('@controllerName', $(this));
+        });
+    });
+</script>
