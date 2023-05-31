@@ -15,7 +15,8 @@ public class ApplicationContext : DbContext
     public DbSet<Type> Types { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<SportEvent> SportEvents { get; set; } = null!;
-
+    public DbSet<Team> Teams { get; set; } = null!;
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.LogTo(Console.WriteLine);
