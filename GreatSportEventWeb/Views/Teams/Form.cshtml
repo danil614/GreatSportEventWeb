@@ -18,8 +18,8 @@
         @Html.Hidden("Id", Model.Id)
 
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-2" asp-for="Name"></label>
-            <div class="col-sm-10">
+            <label class="col-form-label col-sm-3" asp-for="Name"></label>
+            <div class="col-sm-9">
                 <input class="form-control" asp-for="Name"/>
                 <span class="text-danger" asp-validation-for="Name"></span>
             </div>
@@ -27,7 +27,7 @@
 
         <div class="mb-3 row">
             <label class="col-form-label col-sm-3" asp-for="LocationId"></label>
-            <div class="col-sm-10">
+            <div class="col-sm-9">
                 @Html.DropDownListFor(
                     item => item.LocationId,
                     new SelectList(ViewBag.Locations, "Id", ""),
@@ -37,24 +37,24 @@
         </div>
 
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-2" asp-for="ComeFrom"></label>
-            <div class="col-sm-10">
+            <label class="col-form-label col-sm-3" asp-for="ComeFrom"></label>
+            <div class="col-sm-9">
                 <input class="form-control" asp-for="ComeFrom"/>
                 <span class="text-danger" asp-validation-for="ComeFrom"></span>
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-2" asp-for="Rating"></label>
-            <div class="col-sm-10">
+            <label class="col-form-label col-sm-3" asp-for="Rating"></label>
+            <div class="col-sm-9">
                 <input class="form-control" asp-for="Rating"/>
                 <span class="text-danger" asp-validation-for="Rating"></span>
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label class="col-form-label col-sm-2" asp-for="Description"></label>
-            <div class="col-sm-10">
+            <label class="col-form-label col-sm-3" asp-for="Description"></label>
+            <div class="col-sm-9">
                 <textarea class="form-control" rows="8" asp-for="Description"></textarea>
                 <span class="text-danger" asp-validation-for="Description"></span>
             </div>

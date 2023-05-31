@@ -115,7 +115,7 @@ public class TeamsController : Controller
     [HttpGet]
     public FileContentResult ExportToExcel()
     {
-        var data = DatabaseScripts<Location>.GetCachedData(_context, _cache).ToList();
+        var data = DatabaseScripts<Team>.GetCachedData(_context, _cache).ToList();
         string[] columns = { "Name", "Location", "ComeFrom", "Rating", "Description" };
         var fileContent = ExcelExport.ExportExcel(data, columns, true);
         return File(fileContent ?? Array.Empty<byte>(), ExcelExport.ExcelContentType, "Teams.xlsx");
@@ -129,7 +129,7 @@ public class TeamsController : Controller
         var isUnique = !_context.Teams.Any(source =>
             source.Id != item.Id &&
             source.Name == item.Name &&
-            source.Location == item.Location &&
+            source.LocationId == item.LocationId &&
             source.ComeFrom == item.ComeFrom);
 
         return Json(new { isUnique, isValid = ModelState.IsValid });
