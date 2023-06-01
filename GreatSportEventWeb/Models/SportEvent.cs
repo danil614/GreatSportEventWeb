@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GreatSportEventWeb.Models;
 
@@ -39,4 +40,11 @@ public class SportEvent
     [Display(Name = "Описание")]
     [Column("description")]
     public string? Description { get; set; }
+    
+    //[InverseProperty("SportEvent")]
+    public virtual ICollection<ParticipationEvent>? ParticipationEvents { get; set; }
+    
+    [NotMapped]
+    //[BindProperty]
+    public List<int>? SelectedTeamIds { get; set; }
 }

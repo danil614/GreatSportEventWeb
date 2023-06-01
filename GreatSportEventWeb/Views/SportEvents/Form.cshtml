@@ -64,16 +64,34 @@
             </div>
         </div>
 
-        <div class="modal-footer">
-            <div class="col-sm-2">
-                <button class="btn btn-secondary w-100" type="button" data-bs-dismiss="modal">Закрыть</button>
-            </div>
-            <div class="col-sm-3">
-                <button class="btn btn-primary w-100" type="submit">Сохранить</button>
+        <div class="mb-3 row">
+            <label  class="col-form-label col-sm-3" >Участвующие команды (должны быть выделены галочками)</label>
+            <div class="col-sm-9">
+                <div class="card">
+                    <div class="card-body">
+                        @foreach (var team in ViewBag.Teams)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="@team.Id" id="check-input-@team.Id" 
+                                       name="SelectedTeamIds" checked="@Model.SelectedTeamIds?.Contains(team.Id)">
+                                <label class="form-check-label" for="check-input-@team.Id">@team.Name</label>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
-    }
-</div>
+
+        <div class="modal-footer">
+                <div class="col-sm-2">
+                    <button class="btn btn-secondary w-100" type="button" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-primary w-100" type="submit">Сохранить</button>
+                </div>
+            </div>
+            }
+        </div>
 
 @await Html.PartialAsync("_ValidationScriptsPartial");
 

@@ -74,10 +74,17 @@ public class SportEventsController : Controller
         var item = _context.SportEvents.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
 
+        if (item.ParticipationEvents != null)
+            item.SelectedTeamIds = item.ParticipationEvents
+                .Select(pe => pe.TeamId)
+                .ToList();
+
         ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache)
             .OrderBy(location => location.ToString());
         ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name)
             .Where(type => type.TypeType == TypeType.SportEvent);
+        ViewBag.Teams = DatabaseScripts<Team>.GetCachedData(_context, _cache).OrderBy(team => team.Name);
+        
         ViewBag.Edit = true;
 
         return PartialView("Form", item);
@@ -92,6 +99,8 @@ public class SportEventsController : Controller
             .OrderBy(location => location.ToString());
         ViewBag.Types = DatabaseScripts<Type>.GetCachedData(_context, _cache).OrderBy(type => type.Name)
             .Where(type => type.TypeType == TypeType.SportEvent);
+        ViewBag.Teams = DatabaseScripts<Team>.GetCachedData(_context, _cache).OrderBy(team => team.Name);
+        
         ViewBag.Edit = false;
 
         return PartialView("Form", item);
