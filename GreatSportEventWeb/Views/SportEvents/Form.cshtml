@@ -107,7 +107,7 @@
             let timeValue = $('#PartDuration').val(); // Значение из поля ввода длительности
             $('#Duration').val(timeValue + ":00"); // Установка значения в скрытое поле
             
-            checkUnique('@controllerName');
+            checkUnique('@controllerName', ['SelectedTeamIds']);
         });
     });
 </script>

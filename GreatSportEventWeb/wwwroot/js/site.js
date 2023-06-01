@@ -136,14 +136,18 @@ function clearInputFilter() {
 }
 
 // Функция для проверки данных на уникальность.
-function checkUnique(controllerName) {
+function checkUnique(controllerName, excludedFields = []) {
     let fieldTags = ['input', 'textarea', 'select'];
     let formData = {};
 
     fieldTags.forEach(function (tag) {
         $('form ' + tag).each(function () {
             let fieldName = $(this).attr('name');
-            formData[fieldName] = $(this).val();
+
+            // Проверяем, что имя поля не содержится в исключенных полях
+            if (!excludedFields.includes(fieldName)) {
+                formData[fieldName] = $(this).val();
+            }
         });
     });
 

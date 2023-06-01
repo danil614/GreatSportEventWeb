@@ -114,6 +114,8 @@ public class SportEventsController : Controller
             _context.SportEvents.Update(item);
             var rowsAffected = _context.SaveChanges();
 
+            AddParticipationEvents(item.SelectedTeamIds, item.Id);
+
             // При обновлении записи в базе данных, очищаем кэш
             _cache.Remove(typeof(SportEvent));
 
@@ -126,6 +128,35 @@ public class SportEventsController : Controller
         foreach (var error in errors) errorMessage += error.ErrorMessage + "\n";
 
         return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
+    }
+    
+    private void AddParticipationEvents(List<int>? selectedTeamIds, int sportEventId)
+    {
+        if (selectedTeamIds != null)
+        {
+            foreach (var teamId in selectedTeamIds)
+            {
+                // Проверка наличия существующей записи ParticipationEvent
+                var existingParticipationEvent = _context.ParticipationEvents
+                    .FirstOrDefault(pe => pe.TeamId == teamId && pe.SportEventId == sportEventId);
+
+                if (existingParticipationEvent == null)
+                {
+                    // Создание нового экземпляра ParticipationEvent и добавление в базу данных
+                    var participationEvent = new ParticipationEvent
+                    {
+                        TeamId = teamId,
+                        SportEventId = sportEventId
+                        // Другие свойства ParticipationEvent, если есть
+                    };
+
+                    _context.ParticipationEvents.Add(participationEvent);
+                }
+            }
+
+            // Сохранение изменений в базе данных
+            _context.SaveChanges();
+        }
     }
 
     [HttpGet]

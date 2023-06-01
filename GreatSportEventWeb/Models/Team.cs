@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GreatSportEventWeb.Models;
 
 [Table("Teams")]
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public class Team
 {
     [Key] [Column("team_id")] public int Id { get; set; }
