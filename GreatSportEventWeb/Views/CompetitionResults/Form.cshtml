@@ -1,0 +1,59 @@
+﻿@model ParticipationEvent
+
+@{
+    ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " результата соревнования";
+    const string controllerName = "CompetitionResults";
+}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">@ViewData["Title"]</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+</div>
+
+<div class="modal-body">
+    <div id="formAlert" class="alert alert-danger" role="alert" style="display: none;">[TextContent]</div>
+    @using (Html.BeginForm("SaveItem", controllerName, FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        @Html.Hidden("SportEventId", Model.SportEventId)
+        @Html.Hidden("TeamId", Model.TeamId)
+        
+        <div class="mb-3">
+            <label class="form-label" asp-for="SportEvent"></label>
+            <input type="text" asp-for="SportEvent" readonly class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Team"></label>
+            <input type="text" asp-for="Team" readonly class="form-control">
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label" asp-for="Score"></label>
+            <input class="form-control" asp-for="Score"/>
+            <span class="text-danger" asp-validation-for="Score"></span>
+        </div>
+
+        <div class="modal-footer">
+                <div class="col-sm-2">
+                    <button class="btn btn-secondary w-100" type="button" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-primary w-100" type="submit">Сохранить</button>
+                </div>
+            </div>
+            }
+        </div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+    $(document).ready(function () {
+        $.validator.messages.number = 'Введите правильное числовое значение.';
+
+        $('form').submit(function (event) {
+            event.preventDefault();
+            checkUnique('@controllerName', ['SportEvent', 'Team']);
+        });
+    });
+</script>

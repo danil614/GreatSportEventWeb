@@ -44,4 +44,9 @@ public class SportEvent
     
     [NotMapped]
     public List<int>? SelectedTeamIds { get; set; }
+
+    public override string ToString()
+    {
+        return $"{Type}, {Location}, {DateTime:dd.MM.yyyy HH:mm}";
+    }
 }

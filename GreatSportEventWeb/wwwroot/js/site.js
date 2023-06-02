@@ -1,6 +1,7 @@
 ﻿// Функция для обновления таблицы с очисткой кэша.
 function refreshCache(controllerName) {
     refreshTableData(controllerName, null, null, true);
+    alert("Таблица успешно обновлена.");
 }
 
 // Функция для обновления данных таблицы через AJAX.
@@ -55,22 +56,44 @@ function handleSortClick(controllerName, current) {
     current.data("sort-direction", newSortDirection);
 }
 
+function getDictionaryFromId(id) {
+    let data = null;
+
+    if (typeof id === 'object') {
+        // Если id является объектом (словарем)
+        data = id;
+    } else if (typeof id === 'string') {
+        // Если id является строкой
+        data = {id: id};
+    } else {
+        // Если тип id не соответствует ожидаемым вариантам, обработать эту ситуацию и выдать ошибку
+        console.error('Неверный тип id:', typeof id);
+        alert("Произошла ошибка при удалении записи.");
+    }
+    
+    return data;
+}
+
 // Функция для удаления записи по идентификатору.
 function deleteItem(controllerName, id) {
-    if (confirm("Вы уверены, что хотите удалить эту запись?")) {
-        $.ajax({
-            url: '/' + controllerName + '/DeleteItem',
-            type: "POST",
-            data: {id: id},
-            success: function () {
-                refreshTableData(controllerName);
-                alert("Запись успешно удалена.");
-            },
-            error: function (error) {
-                console.log(error);
-                alert("Произошла ошибка при удалении записи.");
-            }
-        });
+    let data = getDictionaryFromId(id);
+    
+    if (data != null) {
+        if (confirm("Вы уверены, что хотите удалить эту запись?")) {
+            $.ajax({
+                url: '/' + controllerName + '/DeleteItem',
+                type: "POST",
+                data: data,
+                success: function () {
+                    refreshTableData(controllerName);
+                    alert("Запись успешно удалена.");
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert("Произошла ошибка при удалении записи.");
+                }
+            });
+        }
     }
 }
 
@@ -81,22 +104,26 @@ function editItem(controllerName, id) {
 
 // Функция открытия модального окна.
 function openModal(url, id) {
-    // Получаем объект модального окна
-    let modal = new bootstrap.Modal(document.getElementById('modalWindow'));
+    let data = getDictionaryFromId(id);
 
-    $.ajax({
-        url: url,
-        type: "GET",
-        data: {id: id},
-        success: function (response) {
-            $('#modalWindow').find('.modal-content').html(response);
-            modal.show();
-        },
-        error: function (error) {
-            console.log(error);
-            alert("Произошла ошибка при загрузке данных.");
-        }
-    });
+    if (data != null) {
+        // Получаем объект модального окна
+        let modal = new bootstrap.Modal(document.getElementById('modalWindow'));
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: data,
+            success: function (response) {
+                $('#modalWindow').find('.modal-content').html(response);
+                modal.show();
+            },
+            error: function (error) {
+                console.log(error);
+                alert("Произошла ошибка при загрузке данных.");
+            }
+        });
+    }
 }
 
 // Функция для создания новой записи.

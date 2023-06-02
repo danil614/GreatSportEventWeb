@@ -17,6 +17,9 @@
         <AdditionalFiles Include="Views\Athletes\Form.cshtml" />
         <AdditionalFiles Include="Views\Athletes\Index.cshtml" />
         <AdditionalFiles Include="Views\Athletes\_Table.cshtml" />
+        <AdditionalFiles Include="Views\CompetitionResults\Form.cshtml" />
+        <AdditionalFiles Include="Views\CompetitionResults\Index.cshtml" />
+        <AdditionalFiles Include="Views\CompetitionResults\_Table.cshtml" />
         <AdditionalFiles Include="Views\Positions\Form.cshtml" />
         <AdditionalFiles Include="Views\Positions\Index.cshtml" />
         <AdditionalFiles Include="Views\Positions\_Table.cshtml" />
