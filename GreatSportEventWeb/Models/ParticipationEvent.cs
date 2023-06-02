@@ -24,6 +24,5 @@ public class ParticipationEvent
     [Display(Name = "Рейтинг")]
     [Range(0, int.MaxValue, ErrorMessage = "Число должно быть больше 0 и меньше 2147483647.")]
     [RegularExpression("^[0-9]+$", ErrorMessage = "Число должно быть целым и положительным.")]
-    [Required(ErrorMessage = "Поле является обязательным.")]
-    [Column("score")] public int Score { get; set; }
+    [Column("score")] public int? Score { get; set; }
 }

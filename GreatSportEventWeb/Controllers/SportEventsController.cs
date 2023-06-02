@@ -157,8 +157,8 @@ public class SportEventsController : Controller
                 var participationEvent = new ParticipationEvent
                 {
                     TeamId = teamId,
-                    SportEventId = sportEventId
-                    // Другие свойства ParticipationEvent, если есть
+                    SportEventId = sportEventId,
+                    Score = null
                 };
 
                 _context.ParticipationEvents.Add(participationEvent);
@@ -166,6 +166,7 @@ public class SportEventsController : Controller
 
         // Сохранение изменений в базе данных
         _context.SaveChanges();
+        _cache.Remove(typeof(ParticipationEvent));
     }
 
     [HttpGet]
