@@ -21,6 +21,7 @@ public class ApplicationContext : DbContext
     public DbSet<ParticipationEvent> ParticipationEvents { get; set; } = null!;
     public DbSet<Training> Trainings { get; set; } = null!;
     public DbSet<Employee> Employees { get; set; } = null!;
+    public DbSet<OrganisationEvent> OrganisationEvents { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

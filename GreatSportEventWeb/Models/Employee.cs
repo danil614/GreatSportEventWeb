@@ -58,6 +58,9 @@ public class Employee
     public int PositionId { get; set; }
     
     [Display(Name = "Должность")] public virtual Position? Position { get; set; }
+    
+    [NotMapped]
+    public List<int>? SelectedEventIds { get; set; }
 
     public override string ToString()
     {

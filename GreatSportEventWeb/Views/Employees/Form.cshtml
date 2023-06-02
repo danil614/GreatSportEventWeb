@@ -89,6 +89,24 @@
                 <span class="text-danger" asp-validation-for="TeamId"></span>
             </div>
         </div>
+        
+        <div class="mb-3 row">
+            <label  class="col-form-label col-sm-3" >Мероприятия, которые организует сотрудник (должны быть выделены галочками)</label>
+            <div class="col-sm-9">
+                <div class="card">
+                    <div class="card-body">
+                        @foreach (var sportEvent in ViewBag.SportEvents)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="@sportEvent.Id" id="check-input-@sportEvent.Id" 
+                                       name="SelectedEventIds" checked="@Model.SelectedEventIds?.Contains(sportEvent.Id)">
+                                <label class="form-check-label" for="check-input-@sportEvent.Id">@sportEvent</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal-footer">
             <div class="col-sm-2">
@@ -108,7 +126,7 @@
         $("#PhoneNumber").inputmask({ mask: "+99999999999[9]", greedy: false });
         $('form').submit(function (event) {
             event.preventDefault();
-            checkUnique('@controllerName');
+            checkUnique('@controllerName', ['SelectedEventIds']);
         });
     });
 </script>

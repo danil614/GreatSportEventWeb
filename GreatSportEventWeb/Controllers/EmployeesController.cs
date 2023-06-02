@@ -78,6 +78,10 @@ public class EmployeesController : Controller
     {
         var item = _context.Employees.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
+        
+        item.SelectedEventIds = DatabaseScripts<OrganisationEvent>.GetCachedData(_context, _cache)
+            .Where(oe => oe.EmployeeId == id)
+            .Select(oe => oe.SportEventId).ToList();
 
         ViewBag.Gender = DatabaseScripts<Gender>.GetCachedData(_context, _cache).OrderBy(gender => gender.Name);
         ViewBag.Positions = DatabaseScripts<Position>.GetCachedData(_context, _cache).OrderBy(position => position.Name);
@@ -88,6 +92,8 @@ public class EmployeesController : Controller
                     Id = -1,
                     Name = ""
                 });
+        ViewBag.SportEvents =
+            DatabaseScripts<SportEvent>.GetCachedData(_context, _cache).OrderBy(team => team.DateTime);
         ViewBag.Edit = true;
 
         return PartialView("Form", item);
@@ -107,6 +113,8 @@ public class EmployeesController : Controller
                     Id = -1,
                     Name = ""
                 });
+        ViewBag.SportEvents =
+            DatabaseScripts<SportEvent>.GetCachedData(_context, _cache).OrderBy(team => team.DateTime);
         ViewBag.Edit = false;
 
         return PartialView("Form", item);
@@ -120,6 +128,9 @@ public class EmployeesController : Controller
             item.TeamId = item.TeamId == -1 ? null : item.TeamId;
             _context.Employees.Update(item);
             var rowsAffected = _context.SaveChanges();
+            
+            item.SelectedEventIds ??= new List<int>();
+            UpdateOrganisationEvents(item.SelectedEventIds, item.Id);
 
             // При обновлении записи в базе данных, очищаем кэш
             _cache.Remove(typeof(Employee));
@@ -133,6 +144,42 @@ public class EmployeesController : Controller
         foreach (var error in errors) errorMessage += error.ErrorMessage + "\n";
 
         return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
+    }
+    
+    private void UpdateOrganisationEvents(List<int> selectedEventIds, int employeeId)
+    {
+        var existingEvents = _context.OrganisationEvents.Where(oe => oe.EmployeeId == employeeId)
+            .Select(oe => oe.SportEventId).ToList();
+
+        var onDeleteEvents = existingEvents.Except(selectedEventIds);
+        var onAddEvents = selectedEventIds.Except(existingEvents);
+
+        foreach (var eventId in onDeleteEvents)
+        {
+            var organisationEvent =
+                _context.OrganisationEvents.FirstOrDefault(
+                    oe => oe.SportEventId == eventId && oe.EmployeeId == employeeId);
+
+            if (organisationEvent != null)
+            {
+                _context.OrganisationEvents.Remove(organisationEvent);
+            }
+        }
+
+        foreach (var eventId in onAddEvents)
+        {
+            var organisationEvent = new OrganisationEvent
+            {
+                SportEventId = eventId,
+                EmployeeId = employeeId
+            };
+
+            _context.OrganisationEvents.Add(organisationEvent);
+        }
+
+        // Сохранение изменений в базе данных
+        _context.SaveChanges();
+        _cache.Remove(typeof(OrganisationEvent));
     }
 
     [HttpGet]
