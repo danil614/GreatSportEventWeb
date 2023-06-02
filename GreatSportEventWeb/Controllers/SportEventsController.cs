@@ -114,7 +114,8 @@ public class SportEventsController : Controller
             _context.SportEvents.Update(item);
             var rowsAffected = _context.SaveChanges();
 
-            AddParticipationEvents(item.SelectedTeamIds, item.Id);
+            item.SelectedTeamIds ??= new List<int>();
+            UpdateParticipationEvents(item.SelectedTeamIds, item.Id);
 
             // При обновлении записи в базе данных, очищаем кэш
             _cache.Remove(typeof(SportEvent));
@@ -129,34 +130,42 @@ public class SportEventsController : Controller
 
         return StatusCode(StatusCodes.Status500InternalServerError, new { errorMessage });
     }
-    
-    private void AddParticipationEvents(List<int>? selectedTeamIds, int sportEventId)
+
+    private void UpdateParticipationEvents(List<int> selectedTeamIds, int sportEventId)
     {
-        if (selectedTeamIds != null)
+        var existingTeams = _context.ParticipationEvents.Where(pe => pe.SportEventId == sportEventId)
+            .Select(pe => pe.TeamId).ToList();
+
+        var onDeleteTeams = existingTeams.Except(selectedTeamIds);
+        var onAddTeams = selectedTeamIds.Except(existingTeams);
+
+        foreach (var teamId in onDeleteTeams)
         {
-            foreach (var teamId in selectedTeamIds)
+            var participationEvent =
+                _context.ParticipationEvents.FirstOrDefault(
+                    pe => pe.TeamId == teamId && pe.SportEventId == sportEventId);
+
+            if (participationEvent != null)
             {
-                // Проверка наличия существующей записи ParticipationEvent
-                var existingParticipationEvent = _context.ParticipationEvents
-                    .FirstOrDefault(pe => pe.TeamId == teamId && pe.SportEventId == sportEventId);
-
-                if (existingParticipationEvent == null)
-                {
-                    // Создание нового экземпляра ParticipationEvent и добавление в базу данных
-                    var participationEvent = new ParticipationEvent
-                    {
-                        TeamId = teamId,
-                        SportEventId = sportEventId
-                        // Другие свойства ParticipationEvent, если есть
-                    };
-
-                    _context.ParticipationEvents.Add(participationEvent);
-                }
+                _context.ParticipationEvents.Remove(participationEvent);
             }
-
-            // Сохранение изменений в базе данных
-            _context.SaveChanges();
         }
+
+        foreach (var teamId in onAddTeams)
+        {
+            // Создание нового экземпляра ParticipationEvent и добавление в базу данных
+                var participationEvent = new ParticipationEvent
+                {
+                    TeamId = teamId,
+                    SportEventId = sportEventId
+                    // Другие свойства ParticipationEvent, если есть
+                };
+
+                _context.ParticipationEvents.Add(participationEvent);
+        }
+
+        // Сохранение изменений в базе данных
+        _context.SaveChanges();
     }
 
     [HttpGet]
