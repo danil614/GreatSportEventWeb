@@ -5,7 +5,7 @@ namespace GreatSportEventWeb.Models;
 
 [Table("Teams")]
 // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-public class Team
+public class Team : IComparable<Team>
 {
     [Key] [Column("team_id")] public int Id { get; set; }
 
@@ -29,7 +29,7 @@ public class Team
     public string ComeFrom { get; set; } = null!;
 
     [Display(Name = "Рейтинг команды")]
-    [Range(1, int.MaxValue, ErrorMessage = "Число должно быть больше 0 и меньше 2147483647.")]
+    [Range(0, int.MaxValue, ErrorMessage = "Число должно быть больше 0 и меньше 2147483647.")]
     [RegularExpression("^[0-9]+$", ErrorMessage = "Число должно быть целым и положительным.")]
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("rating")]
@@ -42,5 +42,12 @@ public class Team
     public override string ToString()
     {
         return Name;
+    }
+
+    public int CompareTo(Team? other)
+    {
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
+        return string.Compare(Name, other.Name, StringComparison.Ordinal);
     }
 }

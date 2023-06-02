@@ -21,11 +21,12 @@ public class ApplicationContext : DbContext
     public DbSet<Athlete> Athletes { get; set; } = null!;
     public DbSet<ParticipationEvent> ParticipationEvents { get; set; } = null!;
     public DbSet<Training> Trainings { get; set; } = null!;
+    public DbSet<Employee> Employees { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.LogTo(Console.WriteLine);
-        optionsBuilder.UseLazyLoadingProxies();
+        //optionsBuilder.UseLazyLoadingProxies();
         //optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning));
     }
 }

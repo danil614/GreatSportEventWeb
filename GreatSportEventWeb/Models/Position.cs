@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GreatSportEventWeb.Models;
 
 [Table("Positions")]
-public class Position
+public class Position : IComparable<Position>
 {
     [Key] [Column("position_id")] public int Id { get; set; }
 
@@ -17,5 +17,12 @@ public class Position
     public override string ToString()
     {
         return Name;
+    }
+
+    public int CompareTo(Position? other)
+    {
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
+        return string.Compare(Name, other.Name, StringComparison.Ordinal);
     }
 }

@@ -1,8 +1,8 @@
-﻿@model Athlete
+﻿@model Employee
 
 @{
-    ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " спортсмена";
-    const string controllerName = "Athletes";
+    ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " сотрудника";
+    const string controllerName = "Employees";
 }
 
 <div class="modal-header">
@@ -78,15 +78,7 @@
                 <span class="text-danger" asp-validation-for="PhoneNumber"></span>
             </div>
         </div>
-        
-        <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" asp-for="Rating"></label>
-            <div class="col-sm-9">
-                <input class="form-control" asp-for="Rating"/>
-                <span class="text-danger" asp-validation-for="Rating"></span>
-            </div>
-        </div>
-        
+
         <div class="mb-3 row">
             <label class="col-form-label col-sm-3" asp-for="TeamId"></label>
             <div class="col-sm-9">
@@ -95,14 +87,6 @@
                     new SelectList(ViewBag.Teams, "Id", ""),
                     new { @class = "form-select" })
                 <span class="text-danger" asp-validation-for="TeamId"></span>
-            </div>
-        </div>
-
-        <div class="mb-3 row">
-            <label class="col-form-label col-sm-3" asp-for="Description"></label>
-            <div class="col-sm-9">
-                <textarea class="form-control" rows="8" asp-for="Description"></textarea>
-                <span class="text-danger" asp-validation-for="Description"></span>
             </div>
         </div>
 
@@ -121,9 +105,7 @@
 
 <script>
     $(document).ready(function () {
-        $.validator.messages.number = 'Введите правильное числовое значение.';
         $("#PhoneNumber").inputmask({ mask: "+99999999999[9]", greedy: false });
-
         $('form').submit(function (event) {
             event.preventDefault();
             checkUnique('@controllerName');
