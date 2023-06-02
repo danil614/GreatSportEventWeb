@@ -7,12 +7,18 @@ namespace GreatSportEventWeb.Data;
 
 public static class DatabaseScripts<T> where T : class
 {
-    private static readonly Dictionary<Type, List<string>> IncludePropertiesMap = new()
+    private static readonly Dictionary<Type, string[]> IncludePropertiesMap = new()
     {
-        //{ typeof(Location), new List<string> { "Property1", "Property2" } },
-        { typeof(Team), new List<string> { "Location", "Location.City" } }//,
-        //{ typeof(Athlete), new List<string> { "Property5", "Property6" } }
-        // Добавьте другие классы и свойства, если необходимо
+        { typeof(Location), new[] { "City", "Type" } },
+        { typeof(SportEvent), new[] { "Location", "Location.City", "Type" } },
+        { typeof(Team), new[] { "Location", "Location.City" } },
+        { typeof(Athlete), new[] { "Gender", "Team", "Position" } },
+        {
+            typeof(ParticipationEvent),
+            new[] { "SportEvent", "SportEvent.Type", "SportEvent.Location", "SportEvent.Location.City", "Team" }
+        },
+        { typeof(Training), new[] { "Location", "Location.City", "Team" } },
+        { typeof(Employee), new[] { "Gender", "Team", "Position" } }
     };
 
     public static IQueryable<T> GetCachedData(ApplicationContext context, IMemoryCache cache)
@@ -23,14 +29,9 @@ public static class DatabaseScripts<T> where T : class
 
         var query = context.Set<T>().AsQueryable();
 
-        if (IncludePropertiesMap.TryGetValue(typeof(T), out var includeProperties))
-        {
-            data = IncludeProperties(query, includeProperties).ToList().AsQueryable();
-        }
-        else
-        {
-            data = query.ToList().AsQueryable();
-        }
+        data = IncludePropertiesMap.TryGetValue(typeof(T), out var includeProperties)
+            ? IncludeProperties(query, includeProperties).ToList().AsQueryable()
+            : query.ToList().AsQueryable();
 
         var cacheEntryOptions = new MemoryCacheEntryOptions()
             .SetSlidingExpiration(TimeSpan.FromMinutes(10));
@@ -40,7 +41,7 @@ public static class DatabaseScripts<T> where T : class
         return data;
     }
 
-    private static IQueryable<T> IncludeProperties(IQueryable<T> query, List<string> includeProperties)
+    private static IQueryable<T> IncludeProperties(IQueryable<T> query, string[] includeProperties)
     {
         foreach (var includeProperty in includeProperties)
         {

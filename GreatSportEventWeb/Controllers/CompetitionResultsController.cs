@@ -68,8 +68,8 @@ public class CompetitionResultsController : Controller
     [HttpGet]
     public IActionResult GetItem(int sportEventId, int teamId)
     {
-        var item = _context.ParticipationEvents.FirstOrDefault(item =>
-            item.SportEventId == sportEventId && item.TeamId == teamId);
+        var item = DatabaseScripts<ParticipationEvent>.GetCachedData(_context, _cache)
+            .FirstOrDefault(item => item.SportEventId == sportEventId && item.TeamId == teamId);
         
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
         

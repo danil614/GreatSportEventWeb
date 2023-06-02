@@ -73,11 +73,10 @@ public class SportEventsController : Controller
     {
         var item = _context.SportEvents.FirstOrDefault(item => item.Id == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
-
-        if (item.ParticipationEvents != null)
-            item.SelectedTeamIds = item.ParticipationEvents
-                .Select(pe => pe.TeamId)
-                .ToList();
+        
+        item.SelectedTeamIds = DatabaseScripts<ParticipationEvent>.GetCachedData(_context, _cache)
+            .Where(pe => pe.SportEventId == id)
+            .Select(pe => pe.TeamId).ToList();
 
         ViewBag.Locations = DatabaseScripts<Location>.GetCachedData(_context, _cache)
             .OrderBy(location => location.ToString());
