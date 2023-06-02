@@ -1,0 +1,95 @@
+﻿@model Training
+
+@{
+    ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " тренировки";
+    const string controllerName = "Trainings";
+}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">@ViewData["Title"]</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+</div>
+
+<div class="modal-body">
+    <div id="formAlert" class="alert alert-danger" role="alert" style="display: none;">[TextContent]</div>
+    @using (Html.BeginForm("SaveItem", controllerName, FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        @Html.Hidden("Id", Model.Id)
+        @Html.Hidden("Duration", Model.Duration) // Скрытое поле для хранения полного значения длительности
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="TeamId"></label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(
+                    item => item.TeamId,
+                    new SelectList(ViewBag.Teams, "Id", ""),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="TeamId"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="LocationId"></label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(
+                    item => item.LocationId,
+                    new SelectList(ViewBag.Locations, "Id", ""),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="LocationId"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="DateTime"></label>
+            <div class="col-sm-9">
+                <input class="form-control" asp-for="DateTime"/>
+                <span class="text-danger" asp-validation-for="DateTime"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="Duration"></label>
+            <div class="col-sm-9">
+                <input class="form-control" type="time" id="PartDuration" name="PartDuration"/>
+                <span class="text-danger" asp-validation-for="Duration"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="Description"></label>
+            <div class="col-sm-9">
+                <textarea class="form-control" rows="8" asp-for="Description"></textarea>
+                <span class="text-danger" asp-validation-for="Description"></span>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+                <div class="col-sm-2">
+                    <button class="btn btn-secondary w-100" type="button" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-primary w-100" type="submit">Сохранить</button>
+                </div>
+            </div>
+            }
+        </div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+    $(document).ready(function () {
+        $.validator.messages.number = 'Введите правильное числовое значение.';
+        // Устанавливаем значение из скрытого поля
+        $('#PartDuration').val($('#Duration').val().substring(0, 5));
+        
+        $('form').submit(function (event) {
+            event.preventDefault();
+
+            let timeValue = $('#PartDuration').val(); // Значение из поля ввода длительности
+            $('#Duration').val(timeValue + ":00"); // Установка значения в скрытое поле
+            
+            checkUnique('@controllerName');
+        });
+    });
+</script>

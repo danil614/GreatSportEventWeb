@@ -56,6 +56,7 @@ function handleSortClick(controllerName, current) {
     current.data("sort-direction", newSortDirection);
 }
 
+// Функция получения словаря данных по id.
 function getDictionaryFromId(id) {
     let data = null;
 

@@ -20,6 +20,7 @@ public class ApplicationContext : DbContext
     public DbSet<Position> Positions { get; set; } = null!;
     public DbSet<Athlete> Athletes { get; set; } = null!;
     public DbSet<ParticipationEvent> ParticipationEvents { get; set; } = null!;
+    public DbSet<Training> Trainings { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
