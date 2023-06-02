@@ -68,7 +68,7 @@ function getDictionaryFromId(id) {
     } else {
         // Если тип id не соответствует ожидаемым вариантам, обработать эту ситуацию и выдать ошибку
         console.error('Неверный тип id:', typeof id);
-        alert("Произошла ошибка при удалении записи.");
+        alert("Произошла ошибка при получении id.");
     }
     
     return data;
@@ -128,7 +128,7 @@ function openModal(url, id) {
 
 // Функция для создания новой записи.
 function createItem(controllerName) {
-    openModal('/' + controllerName + '/CreateItem', -1);
+    openModal('/' + controllerName + '/CreateItem', '-1');
 }
 
 // Функция для поиска в таблице
