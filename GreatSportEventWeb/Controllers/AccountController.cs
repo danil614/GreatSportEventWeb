@@ -4,16 +4,19 @@ using GreatSportEventWeb.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace GreatSportEventWeb.Controllers;
 
 public class AccountController : Controller
 {
     private readonly ApplicationContext _context;
+    private readonly IMemoryCache _cache;
 
-    public AccountController(ApplicationContext context)
+    public AccountController(ApplicationContext context, IMemoryCache cache)
     {
         _context = context;
+        _cache = cache;
     }
 
     [HttpGet]
@@ -35,7 +38,7 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var item = _context.Users.FirstOrDefault(
+            var item = DatabaseScripts<User>.GetCachedData(_context, _cache).FirstOrDefault(
                 item => item.Login == user.Login &&
                         item.Password == HashPassword.GetHash(user.Password));
 
@@ -49,7 +52,7 @@ public class AccountController : Controller
             {
                 new(ClaimsIdentity.DefaultNameClaimType, item.Login),
                 new(ClaimsIdentity.DefaultRoleClaimType, item.AccessMode.ToString()),
-                new(ClaimTypes.GivenName, "")
+                new(ClaimTypes.GivenName, item.Person?.GetGivenName() ?? "")
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme,

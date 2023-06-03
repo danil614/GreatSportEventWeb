@@ -1,9 +1,13 @@
-﻿@{
+﻿@using System.Security.Claims
+
+@{
     ViewData["Title"] = "Главная страница";
+    var givenName = User.FindFirstValue(ClaimTypes.GivenName);
+    givenName = string.IsNullOrEmpty(givenName) ? "пользователь" : givenName;
 }
 
 <div class="text-center">
-    <h1 class="display-4 mb-4">Здравствуйте, пользователь!</h1>
+    <h1 class="display-4 mb-4">Здравствуйте, @givenName.Trim()!</h1>
     <p>Это приложение позволит Вам организовать спортивное мероприятие.</p>
     @if (User.Identity is not null && !User.Identity.IsAuthenticated)
     {

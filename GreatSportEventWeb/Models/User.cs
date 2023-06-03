@@ -54,23 +54,23 @@ public class User
     public virtual Viewer? Viewer { get; set; }
 
     [NotMapped]
-    public string? FullName
+    public Person? Person
     {
         get
         {
             if (Athlete is not null)
             {
-                return Athlete.ToString();
+                return Athlete;
             }
             
             if (Employee is not null)
             {
-                return Employee.ToString();
+                return Employee;
             }
             
             if (Viewer is not null)
             {
-                return Viewer.ToString();
+                return Viewer;
             }
 
             return null;

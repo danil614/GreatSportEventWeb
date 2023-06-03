@@ -40,8 +40,8 @@ public class UsersController : Controller
                 ? data.OrderBy(item => item.AccessMode.GetDisplayName())
                 : data.OrderByDescending(item => item.AccessMode.GetDisplayName()),
             "full-name" => sortDirection == "asc"
-                ? data.OrderBy(item => item.FullName)
-                : data.OrderByDescending(item => item.FullName),
+                ? data.OrderBy(item => item.Person)
+                : data.OrderByDescending(item => item.Person),
             _ => data
         };
 
@@ -70,7 +70,7 @@ public class UsersController : Controller
         var item = _context.Users.FirstOrDefault(item => item.Login == id);
         if (item == null) return NotFound(); // Если запись не найдена, возвращаем ошибку 404
 
-        GetDataForForm();
+        GetDataForm();
         item.IsEdit = 1;
 
         return PartialView("Form", item);
@@ -81,13 +81,13 @@ public class UsersController : Controller
     {
         var item = new User();
 
-        GetDataForForm();
+        GetDataForm();
         item.IsEdit = 0;
 
         return PartialView("Form", item);
     }
 
-    private void GetDataForForm()
+    private void GetDataForm()
     {
         ViewBag.Athletes = DatabaseScripts<Athlete>.GetCachedData(_context, _cache).OrderBy(a => a.ToString())
             .Prepend(

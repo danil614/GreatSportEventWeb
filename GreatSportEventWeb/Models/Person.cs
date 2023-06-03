@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GreatSportEventWeb.Models;
 
-public class Person
+public class Person : IComparable<Person>
 {
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Display(Name = "Фамилия")]
@@ -48,5 +48,26 @@ public class Person
         }
         
         return $"{Surname} {Name} {Patronymic}";
+    }
+
+    public string GetGivenName()
+    {
+        if (string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(Patronymic))
+        {
+            return "";
+        }
+        
+        return $"{Name} {Patronymic}";
+    }
+
+    public int CompareTo(Person? other)
+    {
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
+        var surnameComparison = string.Compare(Surname, other.Surname, StringComparison.Ordinal);
+        if (surnameComparison != 0) return surnameComparison;
+        var nameComparison = string.Compare(Name, other.Name, StringComparison.Ordinal);
+        if (nameComparison != 0) return nameComparison;
+        return string.Compare(Patronymic, other.Patronymic, StringComparison.Ordinal);
     }
 }
