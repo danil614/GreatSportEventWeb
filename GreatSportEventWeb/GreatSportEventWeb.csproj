@@ -32,6 +32,9 @@
         <AdditionalFiles Include="Views\Types\Form.cshtml" />
         <AdditionalFiles Include="Views\Types\Index.cshtml" />
         <AdditionalFiles Include="Views\Types\_Table.cshtml" />
+        <AdditionalFiles Include="Views\Viewers\Form.cshtml" />
+        <AdditionalFiles Include="Views\Viewers\Index.cshtml" />
+        <AdditionalFiles Include="Views\Viewers\_Table.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

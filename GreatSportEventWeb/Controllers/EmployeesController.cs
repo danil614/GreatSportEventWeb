@@ -200,7 +200,7 @@ public class EmployeesController : Controller
     {
         if (item == null) return Json(new { isUnique = true, isValid = false });
 
-        var isUnique = !_context.Athletes.Any(source =>
+        var isUnique = !_context.Employees.Any(source =>
             source.Id != item.Id &&
             source.Surname == item.Surname &&
             source.Name == item.Name &&
