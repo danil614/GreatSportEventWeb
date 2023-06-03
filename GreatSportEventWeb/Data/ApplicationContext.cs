@@ -23,6 +23,7 @@ public class ApplicationContext : DbContext
     public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<OrganisationEvent> OrganisationEvents { get; set; } = null!;
     public DbSet<Viewer> Viewers { get; set; } = null!;
+    public DbSet<Seat> Seats { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

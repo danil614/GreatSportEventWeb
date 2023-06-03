@@ -23,6 +23,9 @@
         <AdditionalFiles Include="Views\Positions\Form.cshtml" />
         <AdditionalFiles Include="Views\Positions\Index.cshtml" />
         <AdditionalFiles Include="Views\Positions\_Table.cshtml" />
+        <AdditionalFiles Include="Views\Seats\Form.cshtml" />
+        <AdditionalFiles Include="Views\Seats\Index.cshtml" />
+        <AdditionalFiles Include="Views\Seats\_Table.cshtml" />
         <AdditionalFiles Include="Views\Teams\Form.cshtml" />
         <AdditionalFiles Include="Views\Teams\Index.cshtml" />
         <AdditionalFiles Include="Views\Teams\_Table.cshtml" />

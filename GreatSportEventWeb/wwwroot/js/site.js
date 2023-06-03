@@ -180,12 +180,13 @@ function checkUnique(controllerName, excludedFields = []) {
     });
 
     let formAlert = $('#formAlert');
+    let data = JSON.stringify(formData);
 
     $.ajax({
         url: '/' + controllerName + '/CheckUnique',
         type: 'POST',
-        data: JSON.stringify(formData),
         contentType: 'application/json',
+        data: data,
         success: function (result) {
             if (result.isUnique && result.isValid) {
                 formAlert.hide();
@@ -197,6 +198,10 @@ function checkUnique(controllerName, excludedFields = []) {
                 formAlert.text('Запись с такими данными уже существует!');
                 formAlert.show();
             }
+        },
+        error: function (error) {
+            console.log(error);
+            alert("Произошла ошибка при отправке данных.");
         }
     });
 }

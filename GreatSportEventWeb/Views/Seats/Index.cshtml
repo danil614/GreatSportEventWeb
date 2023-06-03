@@ -1,8 +1,8 @@
-﻿@model IQueryable<GreatSportEventWeb.Models.Type>
+﻿@model IQueryable<Seat>
 
 @{
-    ViewData["Title"] = "Типы";
-    const string controllerName = "Types";
+    ViewData["Title"] = "Посадочные места";
+    const string controllerName = "Seats";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -13,10 +13,16 @@
     <thead>
     <tr>
         <th>
-            <a href="#" data-sort-by="name" data-sort-direction="desc">Название</a>
+            <a href="#" data-sort-by="sport-event" data-sort-direction="desc">Спортивное мероприятие</a>
         </th>
         <th>
-            <a href="#" data-sort-by="type" data-sort-direction="desc">Вид</a>
+            <a href="#" data-sort-by="name" data-sort-direction="desc">Номер места</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="price" data-sort-direction="desc">Цена</a>
+        </th>
+        <th>
+            <a href="#" data-sort-by="is-occupied" data-sort-direction="desc">Занято</a>
         </th>
         <th>Действия</th>
     </tr>
