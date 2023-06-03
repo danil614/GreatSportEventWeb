@@ -1,0 +1,138 @@
+﻿@model User
+
+@{
+    var isEdit = Model.IsEdit == 1;
+    ViewData["Title"] = (isEdit ? "Редактирование" : "Создание") + " пользователя";
+    const string controllerName = "Users";
+}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">@ViewData["Title"]</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+</div>
+
+<div class="modal-body">
+    <div id="formAlert" class="alert alert-danger" role="alert" style="display: none;">[TextContent]</div>
+    @using (Html.BeginForm("SaveItem", controllerName, FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        @Html.Hidden("IsEdit", Model.IsEdit)
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="Login"></label>
+            <div class="col-sm-9">
+                @{
+                    if (isEdit)
+                    {
+                        <input class="form-control" asp-for="Login" readonly/>
+                    }
+                    else
+                    {
+                        <input class="form-control" asp-for="Login"/>
+                    }
+                }
+                <span class="text-danger" asp-validation-for="Login"></span>
+            </div>
+        </div>
+        
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="Password"></label>
+            <div class="col-sm-9">
+                <input class="form-control" asp-for="Password"/>
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="AccessModeId"></label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(
+                    item => item.AccessModeId,
+                    new SelectList(ViewBag.AccessModes, "Id", "Name"),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="AccessModeId"></span>
+            </div>
+        </div>
+        
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="AthleteId"></label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(
+                    item => item.AthleteId,
+                    new SelectList(ViewBag.Athletes, "Id", ""),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="AthleteId"></span>
+            </div>
+        </div>
+        
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="EmployeeId"></label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(
+                    item => item.EmployeeId,
+                    new SelectList(ViewBag.Employees, "Id", ""),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="EmployeeId"></span>
+            </div>
+        </div>
+        
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="ViewerId"></label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(
+                    item => item.ViewerId,
+                    new SelectList(ViewBag.Viewers, "Id", ""),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="ViewerId"></span>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="col-sm-2">
+                <button class="btn btn-secondary w-100" type="button" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary w-100" type="submit">Сохранить</button>
+            </div>
+        </div>
+    }
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+    $(document).ready(function () {
+        $('form').submit(function (event) {
+            event.preventDefault();
+            
+            if (checkPersonFields()) {
+                checkUnique('@controllerName');
+            }
+            else {
+                let formAlert = $('#formAlert');
+                formAlert.text('Только одно из полей "Спортсмен", "Сотрудник", "Зритель" должно быть заполнено!');
+                formAlert.show();
+            }
+        });
+    });
+    
+    function checkPersonFields() {
+        let athleteId = document.getElementById('AthleteId').value;
+        let employeeId = document.getElementById('EmployeeId').value;
+        let viewerId = document.getElementById('ViewerId').value;
+        
+        if (athleteId !== "-1" && employeeId === "-1" && viewerId === "-1") {
+            // Условие выполнено, можно отправить форму
+            return true;
+        } else if (athleteId === "-1" && employeeId !== "-1" && viewerId === "-1") {
+            // Условие выполнено, можно отправить форму
+            return true;
+        } else if (athleteId === "-1" && employeeId === "-1" && viewerId !== "-1") {
+            // Условие выполнено, можно отправить форму
+            return true;
+        } else {
+            // Условие не выполнено, предотвращаем отправку формы
+            return false;
+        }
+    }
+</script>
