@@ -2,11 +2,14 @@
 
 <div class="row justify-content-between">
     <div class="row mt-4 mb-3 g-sm-2 col-sm-4">
-        <div class="col-sm">
-            <button class="btn btn-primary w-100" type="button" onclick="createItem('@Model')">
-                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Создание
-            </button>
-        </div>
+        @if (!(User.IsInRole("Athlete") || User.IsInRole("Trainer") && Model != "Trainings"))
+        {
+            <div class="col-sm">
+                <button class="btn btn-primary w-100" type="button" onclick="createItem('@Model')">
+                    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Создание
+                </button>
+            </div>
+        }
         <div class="col-sm">
             <button class="btn btn-primary w-100" type="button"
                     onclick="location.href='@Url.Action("ExportToExcel", Model)'">
