@@ -6,7 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace GreatSportEventWeb.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin, Hr")]
 public class UsersController : Controller
 {
     private readonly IMemoryCache _cache;
