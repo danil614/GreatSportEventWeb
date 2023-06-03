@@ -95,8 +95,17 @@
 
 @await Html.PartialAsync("_ValidationScriptsPartial");
 
+@if (User.IsInRole("Athlete") || User.IsInRole("Trainer") || User.IsInRole("Hr"))
+{
+    <script>
+        $(document).ready(function() {
+            setModalReadOnly();
+        });
+    </script>
+}
+
 <script>
-    $(document).ready(function () {
+    $(document).ready(function () {       
         $.validator.messages.number = 'Введите правильное числовое значение.';
         // Устанавливаем значение из скрытого поля
         $('#PartDuration').val($('#Duration').val().substring(0, 5));

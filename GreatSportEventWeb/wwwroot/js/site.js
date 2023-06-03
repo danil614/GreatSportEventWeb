@@ -205,3 +205,22 @@ function checkUnique(controllerName, excludedFields = []) {
         }
     });
 }
+
+// Функция для установки модального окна в режим чтения.
+function setModalReadOnly() {
+    let modalId = 'modalWindow';
+    let modal = document.getElementById(modalId);
+
+    if (modal) {
+        let elements = modal.querySelectorAll('input, textarea, select');
+        elements.forEach(function(element) {
+            element.setAttribute('readonly', 'readonly');
+            element.setAttribute('disabled', 'disabled');
+        });
+
+        let buttons = modal.querySelectorAll('button:not([data-bs-dismiss="modal"])');
+        buttons.forEach(function(button) {
+            button.setAttribute('disabled', 'disabled');
+        });
+    }
+}

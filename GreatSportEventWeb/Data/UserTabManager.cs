@@ -85,7 +85,6 @@ public static class UserTabManager
                     Tabs["Cities"],
                     Tabs["SportEvents"],
                     Tabs["Teams"],
-                    Tabs["Positions"],
                     Tabs["Athletes"],
                     Tabs["CompetitionResults"],
                     Tabs["Trainings"]

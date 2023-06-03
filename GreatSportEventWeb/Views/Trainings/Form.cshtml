@@ -77,6 +77,15 @@
 
 @await Html.PartialAsync("_ValidationScriptsPartial");
 
+@if (User.IsInRole("Athlete"))
+{
+    <script>
+        $(document).ready(function() {
+            setModalReadOnly();
+        });
+    </script>
+}
+
 <script>
     $(document).ready(function () {
         $.validator.messages.number = 'Введите правильное числовое значение.';
