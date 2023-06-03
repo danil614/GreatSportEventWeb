@@ -55,4 +55,14 @@ public class Seat
     [Required(ErrorMessage = "Поле является обязательным.")]
     [Column("is_occupied")]
     public bool IsOccupied { get; set; }
+
+    public override string ToString()
+    {
+        if (string.IsNullOrEmpty(Name) && SportEvent == null)
+        {
+            return "";
+        }
+        
+        return $"[{Name}] {SportEvent}";
+    }
 }

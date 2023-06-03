@@ -25,7 +25,15 @@ public static class DatabaseScripts<T> where T : class
             new[] { "SportEvent", "SportEvent.Type", "SportEvent.Location", "SportEvent.Location.City", "Employee" }
         },
         { typeof(User), new[] { "Athlete", "Employee", "Viewer" } },
-        { typeof(Seat), new[] { "SportEvent", "SportEvent.Type", "SportEvent.Location", "SportEvent.Location.City" } }
+        { typeof(Seat), new[] { "SportEvent", "SportEvent.Type", "SportEvent.Location", "SportEvent.Location.City" } },
+        {
+            typeof(Ticket),
+            new[]
+            {
+                "Viewer", "Employee", "Seat", "Seat.SportEvent", "Seat.SportEvent.Type", "Seat.SportEvent.Location",
+                "Seat.SportEvent.Location.City"
+            }
+        }
     };
 
     public static IQueryable<T> GetCachedData(ApplicationContext context, IMemoryCache cache)

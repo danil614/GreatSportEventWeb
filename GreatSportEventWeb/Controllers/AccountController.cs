@@ -52,7 +52,8 @@ public class AccountController : Controller
             {
                 new(ClaimsIdentity.DefaultNameClaimType, item.Login),
                 new(ClaimsIdentity.DefaultRoleClaimType, item.AccessMode.ToString()),
-                new(ClaimTypes.GivenName, item.Person?.GetGivenName() ?? "")
+                new(ClaimTypes.GivenName, item.Person?.GetGivenName() ?? ""),
+                new ("EmployeeId", item.EmployeeId.ToString() ?? "")
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme,

@@ -1,0 +1,79 @@
+﻿@model Ticket
+
+@{
+    ViewData["Title"] = (ViewBag.Edit ? "Редактирование" : "Создание") + " билета";
+    const string controllerName = "Tickets";
+}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="modalLabel">@ViewData["Title"]</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+</div>
+
+<div class="modal-body">
+    <div id="formAlert" class="alert alert-danger" role="alert" style="display: none;">[TextContent]</div>
+    @using (Html.BeginForm("SaveItem", controllerName, FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        @Html.Hidden("Id", Model.Id)
+        @Html.Hidden("EmployeeId", Model.EmployeeId)
+        
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="Employee"></label>
+            <div class="col-sm-9">
+                <input class="form-control" asp-for="Employee" readonly/>
+                <span class="text-danger" asp-validation-for="Employee"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="ViewerId"></label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(
+                    item => item.ViewerId,
+                    new SelectList(ViewBag.Viewers, "Id", ""),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="ViewerId"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="SeatId"></label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(
+                    item => item.SeatId,
+                    new SelectList(ViewBag.Seats, "Id", ""),
+                    new { @class = "form-select" })
+                <span class="text-danger" asp-validation-for="SeatId"></span>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-form-label col-sm-3" asp-for="DateTime"></label>
+            <div class="col-sm-9">
+                <input class="form-control" asp-for="DateTime" readonly/>
+                <span class="text-danger" asp-validation-for="DateTime"></span>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="col-sm-2">
+                <button class="btn btn-secondary w-100" type="button" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-primary w-100" type="submit">Сохранить</button>
+            </div>
+        </div>
+    }
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+    $(document).ready(function () {
+        $('form').submit(function (event) {
+            event.preventDefault();
+            checkUnique('@controllerName', ['Employee']);
+        });
+    });
+</script>
