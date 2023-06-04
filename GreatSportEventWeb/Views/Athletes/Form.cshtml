@@ -119,7 +119,7 @@
 
 @await Html.PartialAsync("_ValidationScriptsPartial");
 
-@if (User.IsInRole("Athlete") || User.IsInRole("Trainer"))
+@if (User.IsInRole("Athlete"))
 {
     <script>
         $(document).ready(function() {
