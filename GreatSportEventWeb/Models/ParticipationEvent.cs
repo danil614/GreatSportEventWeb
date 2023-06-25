@@ -21,7 +21,7 @@ public class ParticipationEvent
     [Display(Name = "Команда")]
     public virtual Team? Team { get; set; }
     
-    [Display(Name = "Рейтинг")]
+    [Display(Name = "Счет")]
     [Range(0, int.MaxValue, ErrorMessage = "Число должно быть больше 0 и меньше 2147483647.")]
     [RegularExpression("^[0-9]+$", ErrorMessage = "Число должно быть целым и положительным.")]
     [Column("score")] public int? Score { get; set; }
